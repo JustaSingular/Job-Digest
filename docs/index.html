@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T&amp;T Job Digest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0b0d;
+    --panel: #141417;
+    --row: #1a1b1f;
+    --row-hover: #212227;
+    --text: #f2f1ec;
+    --muted: #8b8d94;
+    --red: #c8102e;
+    --amber: #f2a900;
+    --border: #2a2b30;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    padding: 32px 16px 64px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+
+  header {
+    border-bottom: 3px solid var(--red);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  h1 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(24px, 5vw, 34px);
+    letter-spacing: 0.5px;
+    margin: 0;
+    line-height: 1.1;
+  }
+  h1 span { color: var(--amber); }
+  .timestamp {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--red);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  .panel { margin-bottom: 32px; }
+  .panel-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px 2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel-title.tech { color: var(--amber); }
+  .board {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    text-decoration: none;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    background: var(--row);
+    transition: background 0.15s ease;
+    opacity: 0;
+    animation: flap 0.4s ease forwards;
+  }
+  .row:last-child { border-bottom: none; }
+  .row:hover { background: var(--row-hover); }
+  .row:nth-child(1) { animation-delay: 0.02s; }
+  .row:nth-child(2) { animation-delay: 0.06s; }
+  .row:nth-child(3) { animation-delay: 0.10s; }
+  .row:nth-child(4) { animation-delay: 0.14s; }
+  .row:nth-child(5) { animation-delay: 0.18s; }
+  .row:nth-child(n+6) { animation-delay: 0.20s; }
+  @keyframes flap {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .row { animation: none; opacity: 1; }
+    .dot { animation: none; }
+  }
+
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 4px 7px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .tag-tech { background: rgba(242,169,0,0.15); color: var(--amber); border: 1px solid rgba(242,169,0,0.4); }
+  .tag-gen { background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid var(--border); }
+
+  .row-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .row-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .row-sub { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row-source { font-size: 11px; color: var(--muted); flex-shrink: 0; display: none; }
+  .row-arrow { color: var(--muted); flex-shrink: 0; }
+
+  @media (min-width: 520px) {
+    .row-source { display: block; }
+  }
+
+  .empty {
+    padding: 20px 16px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    margin: 0;
+  }
+
+  footer {
+    margin-top: 36px;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>T&amp;T JOB<span>DIGEST</span></h1>
+      <div class="timestamp"><span class="dot"></span>UPDATED 23 Jul 2026 &middot; 00:58</div>
+    </header>
+
+    <div class="panel">
+      <p class="panel-title tech">&#9889; Tech &amp; IT positions (2)</p>
+      <div class="board">
+        
+      <a class="row" href="https://islandjobhunt.com/jobs/545502792-information-technology-manager" target="_blank" rel="noopener">
+        <span class="tag tag-tech">TECH</span>
+        <span class="row-main">
+          <span class="row-title">Information Technology Manager</span>
+          <span class="row-sub">S.W.A.T. Estate Police Co. Ltd · Port of Spain, TT</span>
+        </span>
+        <span class="row-source">IslandJobHunt</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Service-Delivery-Lead-Job-235338.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-tech">TECH</span>
+        <span class="row-main">
+          <span class="row-title">Service Delivery Lead</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+      </div>
+    </div>
+
+    <div class="panel">
+      <p class="panel-title">All other positions (30)</p>
+      <div class="board">
+        
+      <a class="row" href="https://islandjobhunt.com/jobs/545502796-ebo-manager" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">EBO Manager</span>
+          <span class="row-sub">Nearshore Teleservices Trinidad · Chaguanas, TT</span>
+        </span>
+        <span class="row-source">IslandJobHunt</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://islandjobhunt.com/jobs/545502795-market-research-analyst-i" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Market Research Analyst I</span>
+          <span class="row-sub">Brightstar Lottery · Port of Spain, TT</span>
+        </span>
+        <span class="row-source">IslandJobHunt</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://islandjobhunt.com/jobs/545502794-legal-secretary" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Legal Secretary</span>
+          <span class="row-sub">Victorem Law Chambers · Port of Spain, TT</span>
+        </span>
+        <span class="row-source">IslandJobHunt</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://islandjobhunt.com/jobs/545502793-accounting-technician" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Accounting Technician</span>
+          <span class="row-sub">CIC Insurance Brokers · Port of Spain, TT</span>
+        </span>
+        <span class="row-source">IslandJobHunt</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://islandjobhunt.com/jobs/545502791-ebo-supervisor" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">EBO Supervisor</span>
+          <span class="row-sub">Nearshore Teleservices Trinidad · Chaguanas, TT</span>
+        </span>
+        <span class="row-source">IslandJobHunt</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://islandjobhunt.com/jobs/545502790-team-lead-non-motor-claims" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Team Lead - Non-Motor Claims</span>
+          <span class="row-sub">Coralisle Group Ltd. · Port of Spain, TT</span>
+        </span>
+        <span class="row-source">IslandJobHunt</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Buyer-Job-235256.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Buyer</span>
+          <span class="row-sub">S.M. Jaleel &amp; Company Limited · Debe/Penal/Siparia / San Fernando</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Accounting-Officer-Accounts-Payables-GL-Job-235619.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Accounting Officer - Accounts Payables &amp; GL</span>
+          <span class="row-sub">Couva/Point Lisas / Chaguanas / San Fernando</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Security-Officer-Job-235587.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Security Officer</span>
+          <span class="row-sub">Ben Industries (Caribbean) Ltd. · Arima/Sangre Grande / Trincity</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Assistant-Manager-Job-235579.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Assistant Manager</span>
+          <span class="row-sub">Chattergoon Group of Companies · Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Senior-Risk-Analyst-Job-235507.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Senior Risk Analyst</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Tele-collector-On-Contract-Job-235478.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Tele-collector On Contract</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Lead-Electrical-and-Instrumentation-Engineer-Job-235475.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Lead Electrical and Instrumentation Engineer</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Project-Engineer-Job-235462.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Project Engineer</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Supervisor-Job-235191.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Supervisor</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Marketing-and-Trading-Manager-Job-235452.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Marketing and Trading Manager</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Van-Driver-Salesman-Job-231541.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Van Driver Salesman</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Sales-Manager-Job-235372.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Sales Manager</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/BRAND-MANAGER-Job-235274.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Brand Manager</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Bilingual-Customer-Service-Representative-Spanish-Job-235295.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Bilingual Customer Service Representative (Spanish)</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Customer-Service-Representative-Job-235290.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Customer Service Representative</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Barataria-Customer-Service-Representative-Job-235289.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Barataria Customer Service Representative</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Supervisor-Fabric-Maintenance-Job-234831.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Supervisor Fabric Maintenance</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Sales-Associate-Job-235111.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Sales Associate</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Accounting-Associate-Job-235104.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Accounting Associate</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Accounting-Assistant-Job-235078.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Accounting Assistant</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/TRAINING-OFFICER-CUSTOMER-EXPERIENCE-Job-235051.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Training Officer Customer Experience</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Heavy-T-Driver-Loader-Job-234983.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Heavy T Driver Loader</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Security-Operations-Supervisor-Job-234934.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Security Operations Supervisor</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+
+      <a class="row" href="https://www.caribbeanjobs.com/Certified-Coatings-Inspector-CIP-Level-Job-234509.aspx" target="_blank" rel="noopener">
+        <span class="tag tag-gen">ROLE</span>
+        <span class="row-main">
+          <span class="row-title">Certified Coatings Inspector CIP Level</span>
+          <span class="row-sub">&nbsp;</span>
+        </span>
+        <span class="row-source">CaribbeanJobs</span>
+        <span class="row-arrow">&rarr;</span>
+      </a>
+      </div>
+    </div>
+
+    <footer>Auto-generated daily from IslandJobHunt &amp; CaribbeanJobs &middot; Trinidad &amp; Tobago, last 24h</footer>
+  </div>
+</body>
+</html>
