@@ -1,0 +1,38 @@
+name: Daily Job Digest
+
+on:
+  schedule:
+    # Runs at 10:00 UTC (6:00 AM AST/Trinidad time) every day
+    - cron: "0 10 * * *"
+  workflow_dispatch: {}  # lets you trigger it manually from the Actions tab too
+
+permissions:
+  contents: write
+
+jobs:
+  run-digest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run scraper
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python main.py
+
+      - name: Commit updated page
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/index.html
+          git diff --staged --quiet || git commit -m "Update job digest $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
