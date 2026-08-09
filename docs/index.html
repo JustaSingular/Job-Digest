@@ -3,184 +3,866 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>T&amp;T Job Digest</title>
+<title>The Job Digest &mdash; Trinidad &amp; Tobago</title>
+<meta name="description" content="A daily broadsheet of every job posted in Trinidad &amp; Tobago, archived in full.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0b0b0d;
-    --panel: #141417;
-    --row: #1a1b1f;
-    --row-hover: #212227;
-    --text: #f2f1ec;
-    --muted: #8b8d94;
-    --red: #c8102e;
-    --amber: #f2a900;
-    --border: #2a2b30;
+    --paper:      #efe8d8;
+    --paper-warm: #e7dfcb;
+    --paper-deep: #ddd3ba;
+    --ink:        #17140f;
+    --ink-soft:   #554c3c;
+    --ink-faint:  #8a7f6b;
+    --rule:       #bfb298;
+    --rule-soft:  #d3c8b1;
+    --red:        #a71622;
+    --gold:       #9a6f13;
   }
+
   * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
   body {
     margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    padding: 32px 16px 64px;
+    background-color: var(--paper);
+    background-image:
+      radial-gradient(ellipse 120% 60% at 50% -10%, rgba(255,252,242,.85), transparent 60%),
+      radial-gradient(ellipse 90% 50% at 100% 100%, rgba(167,22,34,.05), transparent 65%);
+    color: var(--ink);
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.5;
+    padding: 0 18px 90px;
   }
-  .wrap { max-width: 760px; margin: 0 auto; }
 
-  header {
-    border-bottom: 3px solid var(--red);
-    padding-bottom: 20px;
-    margin-bottom: 28px;
+  /* Newsprint tooth. Fixed overlay so it never scrolls with the type. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9;
+    opacity: .5;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='.42'/></svg>");
+  }
+
+  .sheet { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+
+  ::selection { background: var(--red); color: var(--paper); }
+
+  a { color: inherit; }
+
+  /* ---------------------------------------------------------- masthead */
+
+  .masthead { padding-top: 34px; }
+
+  .ears {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  h1 {
-    font-family: 'Archivo Black', sans-serif;
-    font-size: clamp(24px, 5vw, 34px);
-    letter-spacing: 0.5px;
-    margin: 0;
-    line-height: 1.1;
-  }
-  h1 span { color: var(--amber); }
-  .timestamp {
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--red);
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.35; }
-  }
-
-  .panel { margin-bottom: 32px; }
-  .panel-title {
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    letter-spacing: 2px;
+    align-items: baseline;
+    gap: 12px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 10.5px;
+    letter-spacing: .22em;
     text-transform: uppercase;
-    color: var(--muted);
-    margin: 0 0 10px 2px;
+    color: var(--ink-faint);
+    padding-bottom: 8px;
+  }
+  .ears .price { color: var(--red); }
+
+  .hairline { height: 1px; background: var(--rule); }
+  .thickline { height: 5px; background: var(--ink); margin-top: 3px; }
+
+  h1 {
+    font-family: 'Bodoni Moda', 'Bodoni 72', Didot, serif;
+    font-weight: 900;
+    font-size: clamp(46px, 13.2vw, 128px);
+    line-height: .84;
+    letter-spacing: -.025em;
+    margin: 20px 0 0;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  h1 .the {
+    display: block;
+    font-size: .2em;
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: .42em;
+    text-transform: uppercase;
+    margin-bottom: .55em;
+    margin-left: .42em;
+    color: var(--ink-soft);
+  }
+  h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--red);
+  }
+
+  .dateline {
     display: flex;
-    align-items: center;
-    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 22px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 14px 0 12px;
   }
-  .panel-title.tech { color: var(--amber); }
-  .board {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-  }
+  .dateline b { font-weight: 700; color: var(--ink); }
 
-  .row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
-    text-decoration: none;
-    color: var(--text);
-    border-bottom: 1px solid var(--border);
-    background: var(--row);
-    transition: background 0.15s ease;
-    opacity: 0;
-    animation: flap 0.4s ease forwards;
-  }
-  .row:last-child { border-bottom: none; }
-  .row:hover { background: var(--row-hover); }
-  .row:nth-child(1) { animation-delay: 0.02s; }
-  .row:nth-child(2) { animation-delay: 0.06s; }
-  .row:nth-child(3) { animation-delay: 0.10s; }
-  .row:nth-child(4) { animation-delay: 0.14s; }
-  .row:nth-child(5) { animation-delay: 0.18s; }
-  .row:nth-child(n+6) { animation-delay: 0.20s; }
-  @keyframes flap {
-    from { opacity: 0; transform: translateY(-6px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .row { animation: none; opacity: 1; }
-    .dot { animation: none; }
-  }
+  /* ------------------------------------------------------------ lede */
 
-  .tag {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    padding: 4px 7px;
-    border-radius: 4px;
-    flex-shrink: 0;
+  .lede {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px 34px;
+    padding: 26px 0 30px;
+    border-bottom: 1px solid var(--rule);
   }
-  .tag-tech { background: rgba(242,169,0,0.15); color: var(--amber); border: 1px solid rgba(242,169,0,0.4); }
-  .tag-gen { background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid var(--border); }
+  @media (min-width: 720px) { .lede { grid-template-columns: 1.35fr 1fr; } }
 
-  .row-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-  .row-title {
-    font-family: 'Space Mono', monospace;
-    font-size: 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .row-sub { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .row-source { font-size: 11px; color: var(--muted); flex-shrink: 0; display: none; }
-  .row-arrow { color: var(--muted); flex-shrink: 0; }
-
-  @media (min-width: 520px) {
-    .row-source { display: block; }
-  }
-
-  .empty {
-    padding: 20px 16px;
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
+  .lede p {
     margin: 0;
+    font-size: 18.5px;
+    color: var(--ink-soft);
+  }
+  .lede p::first-letter {
+    float: left;
+    font-family: 'Bodoni Moda', Didot, serif;
+    font-size: 3.35em;
+    line-height: .78;
+    font-weight: 700;
+    color: var(--red);
+    padding: .06em .1em 0 0;
+  }
+
+  .tally {
+    display: flex;
+    gap: 26px;
+    align-items: flex-start;
+    border-left: 1px solid var(--rule);
+    padding-left: 26px;
+  }
+  @media (max-width: 719px) {
+    .tally { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule-soft); padding-top: 18px; }
+  }
+  .tally div { line-height: 1; }
+  .tally .n {
+    font-family: 'Bodoni Moda', Didot, serif;
+    font-size: 44px;
+    font-weight: 700;
+    display: block;
+  }
+  .tally .n.hot { color: var(--red); }
+  .tally .l {
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: block;
+    margin-top: 9px;
+  }
+
+  /* ---------------------------------------------------------- controls */
+
+  .controls {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+    padding: 13px 0 12px;
+    margin-bottom: 4px;
+    background: linear-gradient(var(--paper) 78%, rgba(239,232,216,0));
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .search {
+    flex: 1 1 230px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 4px;
+  }
+  .search svg { flex-shrink: 0; }
+  .search input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    font-family: 'Courier Prime', monospace;
+    font-size: 13px;
+    letter-spacing: .06em;
+    color: var(--ink);
+    padding: 2px 0;
+  }
+  .search input::placeholder { color: var(--ink-faint); letter-spacing: .14em; text-transform: uppercase; font-size: 11px; }
+  .search input:focus { outline: none; }
+  .search:focus-within { border-bottom-color: var(--red); }
+
+  .chips { display: flex; gap: 0; }
+  .chip {
+    font-family: 'Courier Prime', monospace;
+    font-size: 10.5px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+    margin-left: -1px;
+    padding: 7px 13px;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+  }
+  .chip:first-child { margin-left: 0; }
+  .chip:hover { background: var(--paper-deep); }
+  .chip[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  /* ---------------------------------------------------------- sections */
+
+  section { padding-top: 40px; }
+
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 0 0 4px;
+  }
+  .sec-head h2 {
+    font-family: 'Bodoni Moda', Didot, serif;
+    font-size: clamp(22px, 4vw, 31px);
+    font-weight: 700;
+    letter-spacing: -.01em;
+    margin: 0;
+    white-space: nowrap;
+  }
+  .sec-head .fill { flex: 1; height: 1px; background: var(--ink); opacity: .28; }
+  .sec-head .n {
+    font-family: 'Courier Prime', monospace;
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    white-space: nowrap;
+  }
+  .sec-sub {
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-faint);
+    margin: 0 0 16px;
+  }
+
+  /* ----------------------------------------------------------- entries */
+
+  .entries { counter-reset: post; }
+
+  .entry {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 15px 14px 15px 46px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule-soft);
+    transition: background .18s ease, padding-left .18s ease;
+  }
+  .entry::before {
+    counter-increment: post;
+    content: counter(post, decimal-leading-zero);
+    position: absolute;
+    left: 8px;
+    top: 17px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    transition: color .18s ease;
+  }
+  .entry:hover, .entry:focus-visible {
+    background: var(--paper-warm);
+    padding-left: 52px;
+    outline: none;
+  }
+  .entry:focus-visible { box-shadow: inset 3px 0 0 var(--red); }
+  .entry:hover::before, .entry:focus-visible::before { color: var(--red); }
+
+  .entry-body { flex: 1; min-width: 0; }
+  .entry-title {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.25;
+    background-image: linear-gradient(var(--red), var(--red));
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    background-position: 0 1.15em;
+    transition: background-size .3s cubic-bezier(.2,.7,.3,1);
+  }
+  .entry:hover .entry-title { background-size: 100% 1px; }
+  .entry-meta {
+    display: block;
+    font-size: 14.5px;
+    color: var(--ink-faint);
+    margin-top: 2px;
+  }
+  .entry-meta em { font-style: italic; color: var(--ink-soft); }
+
+  .entry-side {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .entry-src { display: none; }
+  .entry-day { color: var(--ink-soft); }
+
+  .stamp {
+    font-family: 'Courier Prime', monospace;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--red);
+    border: 1.5px solid var(--red);
+    border-radius: 2px;
+    padding: 2.5px 6px 2px;
+    transform: rotate(-3.5deg);
+    opacity: .82;
+  }
+  .entry:hover .stamp { opacity: 1; }
+
+  .entry-go {
+    flex-shrink: 0;
+    font-family: 'Courier Prime', monospace;
+    font-size: 10.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--red);
+    opacity: 0;
+    transform: translateX(-5px);
+    transition: opacity .18s ease, transform .18s ease;
+    display: none;
+  }
+  .entry:hover .entry-go, .entry:focus-visible .entry-go { opacity: 1; transform: none; }
+
+  @media (min-width: 640px) {
+    .entry-src { display: inline; }
+    .entry-go { display: inline; }
+  }
+
+  /* Staggered set of the day's fresh postings, like type dropping in. */
+  #fresh .entry {
+    opacity: 0;
+    animation: settle .5s cubic-bezier(.2,.7,.3,1) forwards;
+  }
+  #fresh .entry:nth-child(1) { animation-delay: .04s; }
+  #fresh .entry:nth-child(2) { animation-delay: .09s; }
+  #fresh .entry:nth-child(3) { animation-delay: .14s; }
+  #fresh .entry:nth-child(4) { animation-delay: .19s; }
+  #fresh .entry:nth-child(5) { animation-delay: .24s; }
+  #fresh .entry:nth-child(6) { animation-delay: .29s; }
+  #fresh .entry:nth-child(n+7) { animation-delay: .33s; }
+  @keyframes settle {
+    from { opacity: 0; transform: translateY(-7px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* ----------------------------------------------------------- archive */
+
+  .group { border-bottom: 1px solid var(--rule); }
+  .group summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 2px;
+    cursor: pointer;
+    list-style: none;
+    font-family: 'Courier Prime', monospace;
+    font-size: 11.5px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .group summary::-webkit-details-marker { display: none; }
+  .group summary:hover .g-date { color: var(--red); }
+  .g-mark {
+    width: 9px; height: 9px;
+    border: 1.5px solid var(--ink-soft);
+    flex-shrink: 0;
+    position: relative;
+    transition: transform .25s ease, background .2s ease;
+  }
+  .g-mark::before {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    background: var(--red);
+    opacity: 0;
+    transition: opacity .2s ease;
+  }
+  .group[open] .g-mark { transform: rotate(45deg); }
+  .group[open] .g-mark::before { opacity: 1; }
+  .g-date { flex: 1; color: var(--ink); transition: color .18s ease; }
+  .g-count { color: var(--ink-faint); }
+  .group .entries { padding-bottom: 10px; }
+  .group .entry:last-child { border-bottom: 0; }
+
+  /* ------------------------------------------------------------- misc */
+
+  .void {
+    font-style: italic;
+    color: var(--ink-faint);
+    padding: 22px 2px;
+    margin: 0;
+    border-bottom: 1px solid var(--rule-soft);
   }
 
   footer {
-    margin-top: 36px;
-    text-align: center;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
+    margin-top: 62px;
+    padding-top: 20px;
+    border-top: 5px solid var(--ink);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 20px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 10.5px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  footer a { color: var(--ink-soft); }
+
+  [hidden] { display: none !important; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    #fresh .entry { opacity: 1; }
   }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <h1>T&amp;T JOB<span>DIGEST</span></h1>
-      <div class="timestamp"><span class="dot"></span>UPDATED 09 Aug 2026 &middot; 10:25</div>
+  <div class="sheet">
+
+    <header class="masthead">
+      <div class="ears">
+        <span>Vol. I &middot; No. 1</span>
+        <span class="price">Free to read</span>
+      </div>
+      <div class="hairline"></div>
+      <div class="thickline"></div>
+
+      <h1><span class="the">The Trinidad &amp; Tobago</span>Job <em>Digest</em></h1>
+
+      <div class="dateline">
+        <span>Sunday, 9 August 2026</span>
+        <span>Filed <b>14:45 UTC</b></span>
+        <span>30 postings on file</span>
+      </div>
+      <div class="thickline"></div>
+      <div class="hairline" style="margin-top:3px"></div>
     </header>
 
-    <div class="panel">
-      <p class="panel-title tech">&#9889; Tech &amp; IT positions (0)</p>
-      <div class="board">
-        <p class="empty">No new tech jobs posted in the last 24 hours.</p>
+    <div class="lede">
+      <p>Every vacancy this bulletin has ever seen is kept below &mdash; today's
+      catch is set at the top, and each earlier day is bundled into the archive
+      beneath it. Nothing is thrown out. Scraped at dawn from IslandJobHunt and
+      CaribbeanJobs, sorted by machine, printed without comment.</p>
+      <div class="tally">
+        <div><span class="n hot">30</span><span class="l">New today</span></div>
+        <div><span class="n">0</span><span class="l">Tech on file</span></div>
+        <div><span class="n">30</span><span class="l">All on file</span></div>
       </div>
     </div>
 
-    <div class="panel">
-      <p class="panel-title">All other positions (0)</p>
-      <div class="board">
-        <p class="empty">No other listings posted in the last 24 hours.</p>
+    <div class="controls">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <circle cx="6" cy="6" r="4.6" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M9.5 9.5L13 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <input id="q" type="search" placeholder="Search the classifieds" autocomplete="off" aria-label="Search postings">
+      </label>
+      <div class="chips" role="group" aria-label="Filter by field">
+        <button class="chip" data-cat="all" aria-pressed="true">All</button>
+        <button class="chip" data-cat="it" aria-pressed="false">Tech</button>
+        <button class="chip" data-cat="other" aria-pressed="false">Everything else</button>
       </div>
     </div>
 
-    <footer>Auto-generated daily from IslandJobHunt &amp; CaribbeanJobs &middot; Trinidad &amp; Tobago, last 24h</footer>
+    <section data-section id="today">
+      <div class="sec-head">
+        <h2>Posted Today</h2>
+        <span class="fill"></span>
+        <span class="n"><span class="sec-count">30</span> listed</span>
+      </div>
+      <p class="sec-sub">Fresh to the archive as of this morning's run.</p>
+      <div class="entries" id="fresh">
+        <a class="entry" href="https://www.caribbeanjobs.com/Account-Manager-Job-236363.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="account manager arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Account Manager</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Accounts-Payable-Associate-Job-236162.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="accounts payable associate arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Accounts Payable Associate</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Accounts-Receivable-Associate-Job-236163.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="accounts receivable associate arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Accounts Receivable Associate</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/AR-Billing-Specialist-Job-236160.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="ar billing specialist arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">AR Billing Specialist</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Assistant-Manager-Job-236513.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="assistant manager arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Assistant Manager</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/BARTENDER-Job-236377.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="bartender arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Bartender</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/BRAND-MANAGER-Job-235274.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="brand manager arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Brand Manager</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Certified-Coatings-Inspector-CIP-Level-Job-236396.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="certified coatings inspector cip level arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Certified Coatings Inspector CIP Level</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Collections-B2B-Job-236165.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="collections b2b arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Collections B2B</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Customer-Service-Representative-Job-236270.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="customer service representative arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Customer Service Representative</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Executive-Chef-Job-236507.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="executive chef chaguanas / port-of-spain / san fernando caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Executive Chef</span>
+            <span class="entry-meta">Chaguanas / Port-of-Spain / San Fernando</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://islandjobhunt.com/jobs/590848532-facility-specialist" target="_blank" rel="noopener"
+           data-cat="other" data-q="facility specialist slb san fernando, tt islandjobhunt">
+          <span class="entry-body">
+            <span class="entry-title">Facility Specialist</span>
+            <span class="entry-meta"><em>SLB</em> &middot; San Fernando, TT</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">IslandJobHunt</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Field-Collector-contract-Job-236028.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="field collector contract arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Field Collector contract</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Finance-Payment-Officer-Job-236139.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="finance payment officer arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Finance Payment Officer</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Financial-Analyst-FP-A-Job-236161.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="financial analyst fp a arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Financial Analyst FP A</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/General-Accountant-Job-236164.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="general accountant arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">General Accountant</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://islandjobhunt.com/jobs/590848531-idb-invest-investment-management-analyst-or-associates-talent-pool" target="_blank" rel="noopener"
+           data-cat="other" data-q="idb invest - investment management analyst or associates - talent pool idb invest port of spain, tt islandjobhunt">
+          <span class="entry-body">
+            <span class="entry-title">IDB Invest - Investment Management Analyst or Associates - Talent Pool</span>
+            <span class="entry-meta"><em>IDB Invest</em> &middot; Port of Spain, TT</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">IslandJobHunt</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://islandjobhunt.com/jobs/590848535-idb-invest-risk-management-senior-associates-or-officers-talent-pool" target="_blank" rel="noopener"
+           data-cat="other" data-q="idb invest - risk management senior associates or officers - talent pool idb invest port of spain, tt islandjobhunt">
+          <span class="entry-body">
+            <span class="entry-title">IDB Invest - Risk Management Senior Associates or Officers - Talent Pool</span>
+            <span class="entry-meta"><em>IDB Invest</em> &middot; Port of Spain, TT</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">IslandJobHunt</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Loan-Officer-Job-235809.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="loan officer arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Loan Officer</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Manager-Senior-Manager-Target-Operating-Job-236166.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="manager senior manager target operating arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Manager Senior Manager Target Operating</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Marketing-Manager-Job-236290.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="marketing manager arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Marketing Manager</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Pharmaceuticals-Sales-Representative-South-Job-236303.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="pharmaceuticals sales representative south arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Pharmaceuticals Sales Representative South</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://islandjobhunt.com/jobs/590848537-program-manager-completions-commissioning-start-up-ccs-trinidad-guyana-operations" target="_blank" rel="noopener"
+           data-cat="other" data-q="program manager, completions, commissioning &amp;amp; start-up (ccs), trinidad &amp;amp; guyana operations kent san fernando, tt islandjobhunt">
+          <span class="entry-body">
+            <span class="entry-title">Program Manager, Completions, Commissioning &amp; Start-Up (CCS), Trinidad &amp; Guyana Operations</span>
+            <span class="entry-meta"><em>Kent</em> &middot; San Fernando, TT</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">IslandJobHunt</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Sales-Executive-Job-236315.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="sales executive arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Sales Executive</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Senior-Risk-Analyst-Job-236312.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="senior risk analyst arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Senior Risk Analyst</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Service-Technician-Job-236026.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="service technician arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Service Technician</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Store-Supervisor-West-Superpharm-Job-236491.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="store supervisor west superpharm arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Store Supervisor West Superpharm</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Tele-collector-Contract-South-Location-Job-236287.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="tele-collector contract south location arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Tele-collector Contract South Location</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://islandjobhunt.com/jobs/590848536-trinidad-and-tobago" target="_blank" rel="noopener"
+           data-cat="other" data-q="trinidad and tobago teamed port of spain, tt islandjobhunt">
+          <span class="entry-body">
+            <span class="entry-title">Trinidad and Tobago</span>
+            <span class="entry-meta"><em>Teamed</em> &middot; Port of Spain, TT</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">IslandJobHunt</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+        <a class="entry" href="https://www.caribbeanjobs.com/Van-Driver-Salesman-Job-231541.aspx" target="_blank" rel="noopener"
+           data-cat="other" data-q="van driver salesman arima/sangre grande / trincity / tunapuna/piarco caribbeanjobs">
+          <span class="entry-body">
+            <span class="entry-title">Van Driver Salesman</span>
+            <span class="entry-meta">Arima/Sangre Grande / Trincity / Tunapuna/Piarco</span>
+          </span>
+          <span class="entry-side"><span class="entry-src">CaribbeanJobs</span></span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>
+      </div>
+      <p class="void sec-empty" hidden>Nothing here matches that.</p>
+    </section>
+
+    <section data-section id="archive">
+      <div class="sec-head">
+        <h2>Back Issues</h2>
+        <span class="fill"></span>
+        <span class="n"><span class="sec-count">0</span> kept</span>
+      </div>
+      <p class="sec-sub">Every previous day, in full. Older links may have expired at the source.</p>
+<p class="void">The archive is empty &mdash; it fills up from the first run onward, and nothing is ever removed.</p>
+      <p class="void sec-empty" hidden>Nothing in the archive matches that.</p>
+    </section>
+
+    <footer>
+      <span>Compiled daily at 06:00 AST</span>
+      <span>Sources: IslandJobHunt &middot; CaribbeanJobs</span>
+      <span>Set in Bodoni &amp; Newsreader</span>
+    </footer>
+
   </div>
+
+<script>
+  (function () {
+    var q = document.getElementById('q');
+    var chips = Array.prototype.slice.call(document.querySelectorAll('.chip'));
+    var entries = Array.prototype.slice.call(document.querySelectorAll('.entry'));
+    var groups = Array.prototype.slice.call(document.querySelectorAll('.group'));
+    var sections = Array.prototype.slice.call(document.querySelectorAll('[data-section]'));
+    var cat = 'all';
+
+    function visible(root) {
+      return root.querySelectorAll('.entry:not([hidden])').length;
+    }
+
+    function apply() {
+      var term = q.value.trim().toLowerCase();
+
+      entries.forEach(function (e) {
+        var okCat = cat === 'all' || e.dataset.cat === cat;
+        var okTerm = !term || e.dataset.q.indexOf(term) !== -1;
+        e.hidden = !(okCat && okTerm);
+      });
+
+      groups.forEach(function (g) {
+        var n = visible(g);
+        g.hidden = n === 0;
+        var label = g.querySelector('.g-count');
+        if (label) label.textContent = n + (n === 1 ? ' posting' : ' postings');
+        if (term && n) g.open = true;
+      });
+
+      var filtering = Boolean(term) || cat !== 'all';
+
+      sections.forEach(function (s) {
+        var n = visible(s);
+        // Only speak up about "no matches" while a filter is actually on -
+        // an empty day already prints its own notice.
+        var empty = s.querySelector('.sec-empty');
+        if (empty) empty.hidden = !(filtering && n === 0);
+        var count = s.querySelector('.sec-count');
+        if (count) count.textContent = n;
+      });
+    }
+
+    q.addEventListener('input', apply);
+    chips.forEach(function (c) {
+      c.addEventListener('click', function () {
+        cat = c.dataset.cat;
+        chips.forEach(function (o) { o.setAttribute('aria-pressed', String(o === c)); });
+        apply();
+      });
+    });
+  })();
+</script>
 </body>
 </html>
