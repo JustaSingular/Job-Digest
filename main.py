@@ -5,7 +5,7 @@ import time
 import html as html_lib
 import requests
 from google.genai import errors
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from google import genai
@@ -14,9 +14,43 @@ load_dotenv()
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
+NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "Brand_New_Jobs_Digest")
+NTFY_URL = f"https://ntfy.sh/{NTFY_TOPIC}"
+
+ARCHIVE_PATH = "docs/jobs.json"
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
+
+
+def site_url():
+    """Public GitHub Pages URL, derived from the Actions environment when
+    available so the ntfy notification can be tapped to open the digest."""
+    repo = os.environ.get("GITHUB_REPOSITORY")
+    if not repo or "/" not in repo:
+        return ""
+    owner, name = repo.split("/", 1)
+    return f"https://{owner.lower()}.github.io/{name}/"
+
+
+def notify(message, title="T&T Job Digest", tags="briefcase"):
+    """Pushes a run summary to the ntfy topic. Never raises - a failed
+    notification must not fail the digest run."""
+    headers = {"Title": title, "Tags": tags}
+    click = site_url()
+    if click:
+        headers["Click"] = click
+    try:
+        requests.post(
+            NTFY_URL,
+            data=message.encode("utf-8"),
+            headers=headers,
+            timeout=15,
+        )
+        print(f"ntfy: sent notification to {NTFY_TOPIC}")
+    except requests.RequestException as e:
+        print(f"ntfy: failed to send notification: {e}")
 
 
 def _within_24h(relative_text):
@@ -238,224 +272,792 @@ def summarize_and_filter(raw_data_string, max_retries=3):
         return {"it_jobs": [], "other_jobs": []}
 
 
-def _row_html(job, is_tech):
-    title = html_lib.escape(job.get("title", "Untitled"))
-    company = html_lib.escape(job.get("company", "") or "")
-    location = html_lib.escape(job.get("location", "") or "")
-    source = html_lib.escape(job.get("source", "") or "")
-    link = html_lib.escape(job.get("link", "") or "#", quote=True)
-    sub = " · ".join(p for p in (company, location) if p)
-    tag_class = "tag-tech" if is_tech else "tag-gen"
-    tag_label = "TECH" if is_tech else "ROLE"
+# ---------------------------------------------------------------- archive
 
-    return f"""
-      <a class="row" href="{link}" target="_blank" rel="noopener">
-        <span class="tag {tag_class}">{tag_label}</span>
-        <span class="row-main">
-          <span class="row-title">{title}</span>
-          <span class="row-sub">{sub if sub else "&nbsp;"}</span>
-        </span>
-        <span class="row-source">{source}</span>
-        <span class="row-arrow">&rarr;</span>
-      </a>"""
+def job_key(job):
+    """Stable identity for a listing, so re-scraping the same job across
+    runs doesn't create a duplicate archive entry."""
+    link = (job.get("link") or "").strip().lower().rstrip("/")
+    if link and link != "#":
+        return link
+    title = (job.get("title") or "").strip().lower()
+    company = (job.get("company") or "").strip().lower()
+    return f"{title}|{company}"
 
 
-def generate_html(digest, output_path="docs/index.html"):
-    it_jobs = digest.get("it_jobs", [])
-    other_jobs = digest.get("other_jobs", [])
-    timestamp = datetime.now().strftime("%d %b %Y &middot; %H:%M")
+def load_archive(path=ARCHIVE_PATH):
+    """Reads every job ever seen. Missing/corrupt file -> empty archive."""
+    if not os.path.exists(path):
+        return []
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, OSError) as e:
+        print(f"Archive at {path} unreadable ({e}) - starting a fresh one.")
+        return []
 
-    it_rows = "\n".join(_row_html(j, True) for j in it_jobs) or \
-        '<p class="empty">No new tech jobs posted in the last 24 hours.</p>'
-    other_rows = "\n".join(_row_html(j, False) for j in other_jobs) or \
-        '<p class="empty">No other listings posted in the last 24 hours.</p>'
+    jobs = data.get("jobs", []) if isinstance(data, dict) else data
+    return [j for j in jobs if isinstance(j, dict)]
 
-    page = f"""<!DOCTYPE html>
+
+def save_archive(jobs, path=ARCHIVE_PATH):
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    payload = {
+        "updated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "count": len(jobs),
+        "jobs": jobs,
+    }
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, ensure_ascii=False)
+    print(f"Archive: {len(jobs)} jobs saved to {path}")
+
+
+def merge_into_archive(archive, digest, run_iso):
+    """Adds this run's listings to the archive without ever removing old
+    ones. Returns the merged archive plus just the entries that are new."""
+    seen = {job_key(j) for j in archive}
+    new_jobs = []
+
+    for category, jobs in (("it", digest.get("it_jobs", [])),
+                           ("other", digest.get("other_jobs", []))):
+        for job in jobs:
+            key = job_key(job)
+            if not key or key in seen:
+                continue
+            seen.add(key)
+            new_jobs.append({
+                "title": job.get("title", "Untitled"),
+                "company": job.get("company", "") or "",
+                "location": job.get("location", "") or "",
+                "source": job.get("source", "") or "",
+                "link": job.get("link", "") or "",
+                "category": category,
+                "first_seen": run_iso,
+            })
+
+    return archive + new_jobs, new_jobs
+
+
+# ----------------------------------------------------------------- render
+
+MONTHS = ["January", "February", "March", "April", "May", "June", "July",
+          "August", "September", "October", "November", "December"]
+
+
+def _seen_date(job):
+    """YYYY-MM-DD of when a job first entered the archive."""
+    return (job.get("first_seen") or "")[:10]
+
+
+def _pretty_date(iso_day):
+    try:
+        d = datetime.strptime(iso_day, "%Y-%m-%d")
+    except ValueError:
+        return iso_day or "Undated"
+    return f"{d.strftime('%A')}, {d.day} {MONTHS[d.month - 1]} {d.year}"
+
+
+def _sorted_for_display(jobs):
+    """Tech first, then alphabetical - the reader's eye goes to the top."""
+    return sorted(jobs, key=lambda j: (j.get("category") != "it",
+                                       (j.get("title") or "").lower()))
+
+
+def _entry_html(job, show_day=False):
+    title = html_lib.escape(job.get("title") or "Untitled")
+    company = html_lib.escape(job.get("company") or "")
+    location = html_lib.escape(job.get("location") or "")
+    source = html_lib.escape(job.get("source") or "")
+    link = html_lib.escape(job.get("link") or "#", quote=True)
+    is_tech = job.get("category") == "it"
+
+    meta_bits = []
+    if company:
+        meta_bits.append(f"<em>{company}</em>")
+    if location:
+        meta_bits.append(location)
+    meta = " &middot; ".join(meta_bits) or "<em>Employer not stated</em>"
+
+    haystack = " ".join(p for p in (title, company, location, source,
+                                    "tech" if is_tech else "") if p).lower()
+    haystack = html_lib.escape(haystack, quote=True)
+
+    day = ""
+    if show_day:
+        iso = _seen_date(job)
+        try:
+            d = datetime.strptime(iso, "%Y-%m-%d")
+            day = f'<span class="entry-day">{d.day} {MONTHS[d.month - 1][:3]}</span>'
+        except ValueError:
+            pass
+
+    stamp = '<span class="stamp">Tech</span>' if is_tech else ""
+
+    return f"""        <a class="entry{' is-tech' if is_tech else ''}" href="{link}" target="_blank" rel="noopener"
+           data-cat="{'it' if is_tech else 'other'}" data-q="{haystack}">
+          <span class="entry-body">
+            <span class="entry-title">{title}</span>
+            <span class="entry-meta">{meta}</span>
+          </span>
+          <span class="entry-side">{stamp}<span class="entry-src">{source}</span>{day}</span>
+          <span class="entry-go">Read&nbsp;&rarr;</span>
+        </a>"""
+
+
+def _archive_groups_html(jobs):
+    """Back issues: one collapsible bundle per day, newest first."""
+    by_day = {}
+    for job in jobs:
+        by_day.setdefault(_seen_date(job), []).append(job)
+
+    if not by_day:
+        return ('<p class="void">The archive is empty &mdash; it fills up from '
+                'the first run onward, and nothing is ever removed.</p>')
+
+    chunks = []
+    for i, day in enumerate(sorted(by_day, reverse=True)):
+        entries = "\n".join(_entry_html(j, show_day=False)
+                            for j in _sorted_for_display(by_day[day]))
+        count = len(by_day[day])
+        chunks.append(f"""      <details class="group"{' open' if i == 0 else ''}>
+        <summary>
+          <span class="g-mark"></span>
+          <span class="g-date">{_pretty_date(day)}</span>
+          <span class="g-count">{count} posting{'' if count == 1 else 's'}</span>
+        </summary>
+        <div class="entries">
+{entries}
+        </div>
+      </details>""")
+    return "\n".join(chunks)
+
+
+PAGE_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>T&amp;T Job Digest</title>
+<title>The Job Digest &mdash; Trinidad &amp; Tobago</title>
+<meta name="description" content="A daily broadsheet of every job posted in Trinidad &amp; Tobago, archived in full.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-  :root {{
-    --bg: #0b0b0d;
-    --panel: #141417;
-    --row: #1a1b1f;
-    --row-hover: #212227;
-    --text: #f2f1ec;
-    --muted: #8b8d94;
-    --red: #c8102e;
-    --amber: #f2a900;
-    --border: #2a2b30;
-  }}
-  * {{ box-sizing: border-box; }}
-  body {{
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    padding: 32px 16px 64px;
-  }}
-  .wrap {{ max-width: 760px; margin: 0 auto; }}
+  :root {
+    --paper:      #efe8d8;
+    --paper-warm: #e7dfcb;
+    --paper-deep: #ddd3ba;
+    --ink:        #17140f;
+    --ink-soft:   #554c3c;
+    --ink-faint:  #8a7f6b;
+    --rule:       #bfb298;
+    --rule-soft:  #d3c8b1;
+    --red:        #a71622;
+    --gold:       #9a6f13;
+  }
 
-  header {{
-    border-bottom: 3px solid var(--red);
-    padding-bottom: 20px;
-    margin-bottom: 28px;
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    background-image:
+      radial-gradient(ellipse 120% 60% at 50% -10%, rgba(255,252,242,.85), transparent 60%),
+      radial-gradient(ellipse 90% 50% at 100% 100%, rgba(167,22,34,.05), transparent 65%);
+    color: var(--ink);
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.5;
+    padding: 0 18px 90px;
+  }
+
+  /* Newsprint tooth. Fixed overlay so it never scrolls with the type. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9;
+    opacity: .5;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='.42'/></svg>");
+  }
+
+  .sheet { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+
+  ::selection { background: var(--red); color: var(--paper); }
+
+  a { color: inherit; }
+
+  /* ---------------------------------------------------------- masthead */
+
+  .masthead { padding-top: 34px; }
+
+  .ears {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    gap: 8px;
-  }}
-  h1 {{
-    font-family: 'Archivo Black', sans-serif;
-    font-size: clamp(24px, 5vw, 34px);
-    letter-spacing: 0.5px;
-    margin: 0;
-    line-height: 1.1;
-  }}
-  h1 span {{ color: var(--amber); }}
-  .timestamp {{
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }}
-  .dot {{
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--red);
-    animation: pulse 2s infinite;
-  }}
-  @keyframes pulse {{
-    0%, 100% {{ opacity: 1; }}
-    50% {{ opacity: 0.35; }}
-  }}
-
-  .panel {{ margin-bottom: 32px; }}
-  .panel-title {{
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    letter-spacing: 2px;
+    align-items: baseline;
+    gap: 12px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 10.5px;
+    letter-spacing: .22em;
     text-transform: uppercase;
-    color: var(--muted);
-    margin: 0 0 10px 2px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }}
-  .panel-title.tech {{ color: var(--amber); }}
-  .board {{
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-  }}
+    color: var(--ink-faint);
+    padding-bottom: 8px;
+  }
+  .ears .price { color: var(--red); }
 
-  .row {{
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
-    text-decoration: none;
-    color: var(--text);
-    border-bottom: 1px solid var(--border);
-    background: var(--row);
-    transition: background 0.15s ease;
-    opacity: 0;
-    animation: flap 0.4s ease forwards;
-  }}
-  .row:last-child {{ border-bottom: none; }}
-  .row:hover {{ background: var(--row-hover); }}
-  .row:nth-child(1) {{ animation-delay: 0.02s; }}
-  .row:nth-child(2) {{ animation-delay: 0.06s; }}
-  .row:nth-child(3) {{ animation-delay: 0.10s; }}
-  .row:nth-child(4) {{ animation-delay: 0.14s; }}
-  .row:nth-child(5) {{ animation-delay: 0.18s; }}
-  .row:nth-child(n+6) {{ animation-delay: 0.20s; }}
-  @keyframes flap {{
-    from {{ opacity: 0; transform: translateY(-6px); }}
-    to {{ opacity: 1; transform: translateY(0); }}
-  }}
-  @media (prefers-reduced-motion: reduce) {{
-    .row {{ animation: none; opacity: 1; }}
-    .dot {{ animation: none; }}
-  }}
+  .hairline { height: 1px; background: var(--rule); }
+  .thickline { height: 5px; background: var(--ink); margin-top: 3px; }
 
-  .tag {{
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    padding: 4px 7px;
-    border-radius: 4px;
-    flex-shrink: 0;
-  }}
-  .tag-tech {{ background: rgba(242,169,0,0.15); color: var(--amber); border: 1px solid rgba(242,169,0,0.4); }}
-  .tag-gen {{ background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid var(--border); }}
-
-  .row-main {{ flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }}
-  .row-title {{
-    font-family: 'Space Mono', monospace;
-    font-size: 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }}
-  .row-sub {{ font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
-  .row-source {{ font-size: 11px; color: var(--muted); flex-shrink: 0; display: none; }}
-  .row-arrow {{ color: var(--muted); flex-shrink: 0; }}
-
-  @media (min-width: 520px) {{
-    .row-source {{ display: block; }}
-  }}
-
-  .empty {{
-    padding: 20px 16px;
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    margin: 0;
-  }}
-
-  footer {{
-    margin-top: 36px;
+  h1 {
+    font-family: 'Bodoni Moda', 'Bodoni 72', Didot, serif;
+    font-weight: 900;
+    font-size: clamp(46px, 13.2vw, 128px);
+    line-height: .84;
+    letter-spacing: -.025em;
+    margin: 20px 0 0;
     text-align: center;
-    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+  }
+  h1 .the {
+    display: block;
+    font-size: .2em;
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: .42em;
+    text-transform: uppercase;
+    margin-bottom: .55em;
+    margin-left: .42em;
+    color: var(--ink-soft);
+  }
+  h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--red);
+  }
+
+  .dateline {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 22px;
+    font-family: 'Courier Prime', monospace;
     font-size: 11px;
-    color: var(--muted);
-  }}
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 14px 0 12px;
+  }
+  .dateline b { font-weight: 700; color: var(--ink); }
+
+  /* ------------------------------------------------------------ lede */
+
+  .lede {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px 34px;
+    padding: 26px 0 30px;
+    border-bottom: 1px solid var(--rule);
+  }
+  @media (min-width: 720px) { .lede { grid-template-columns: 1.35fr 1fr; } }
+
+  .lede p {
+    margin: 0;
+    font-size: 18.5px;
+    color: var(--ink-soft);
+  }
+  .lede p::first-letter {
+    float: left;
+    font-family: 'Bodoni Moda', Didot, serif;
+    font-size: 3.35em;
+    line-height: .78;
+    font-weight: 700;
+    color: var(--red);
+    padding: .06em .1em 0 0;
+  }
+
+  .tally {
+    display: flex;
+    gap: 26px;
+    align-items: flex-start;
+    border-left: 1px solid var(--rule);
+    padding-left: 26px;
+  }
+  @media (max-width: 719px) {
+    .tally { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule-soft); padding-top: 18px; }
+  }
+  .tally div { line-height: 1; }
+  .tally .n {
+    font-family: 'Bodoni Moda', Didot, serif;
+    font-size: 44px;
+    font-weight: 700;
+    display: block;
+  }
+  .tally .n.hot { color: var(--red); }
+  .tally .l {
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: block;
+    margin-top: 9px;
+  }
+
+  /* ---------------------------------------------------------- controls */
+
+  .controls {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+    padding: 13px 0 12px;
+    margin-bottom: 4px;
+    background: linear-gradient(var(--paper) 78%, rgba(239,232,216,0));
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .search {
+    flex: 1 1 230px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 4px;
+  }
+  .search svg { flex-shrink: 0; }
+  .search input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    font-family: 'Courier Prime', monospace;
+    font-size: 13px;
+    letter-spacing: .06em;
+    color: var(--ink);
+    padding: 2px 0;
+  }
+  .search input::placeholder { color: var(--ink-faint); letter-spacing: .14em; text-transform: uppercase; font-size: 11px; }
+  .search input:focus { outline: none; }
+  .search:focus-within { border-bottom-color: var(--red); }
+
+  .chips { display: flex; gap: 0; }
+  .chip {
+    font-family: 'Courier Prime', monospace;
+    font-size: 10.5px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+    margin-left: -1px;
+    padding: 7px 13px;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+  }
+  .chip:first-child { margin-left: 0; }
+  .chip:hover { background: var(--paper-deep); }
+  .chip[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  /* ---------------------------------------------------------- sections */
+
+  section { padding-top: 40px; }
+
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 0 0 4px;
+  }
+  .sec-head h2 {
+    font-family: 'Bodoni Moda', Didot, serif;
+    font-size: clamp(22px, 4vw, 31px);
+    font-weight: 700;
+    letter-spacing: -.01em;
+    margin: 0;
+    white-space: nowrap;
+  }
+  .sec-head .fill { flex: 1; height: 1px; background: var(--ink); opacity: .28; }
+  .sec-head .n {
+    font-family: 'Courier Prime', monospace;
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    white-space: nowrap;
+  }
+  .sec-sub {
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-faint);
+    margin: 0 0 16px;
+  }
+
+  /* ----------------------------------------------------------- entries */
+
+  .entries { counter-reset: post; }
+
+  .entry {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 15px 14px 15px 46px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule-soft);
+    transition: background .18s ease, padding-left .18s ease;
+  }
+  .entry::before {
+    counter-increment: post;
+    content: counter(post, decimal-leading-zero);
+    position: absolute;
+    left: 8px;
+    top: 17px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+    transition: color .18s ease;
+  }
+  .entry:hover, .entry:focus-visible {
+    background: var(--paper-warm);
+    padding-left: 52px;
+    outline: none;
+  }
+  .entry:focus-visible { box-shadow: inset 3px 0 0 var(--red); }
+  .entry:hover::before, .entry:focus-visible::before { color: var(--red); }
+
+  .entry-body { flex: 1; min-width: 0; }
+  .entry-title {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.25;
+    background-image: linear-gradient(var(--red), var(--red));
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    background-position: 0 1.15em;
+    transition: background-size .3s cubic-bezier(.2,.7,.3,1);
+  }
+  .entry:hover .entry-title { background-size: 100% 1px; }
+  .entry-meta {
+    display: block;
+    font-size: 14.5px;
+    color: var(--ink-faint);
+    margin-top: 2px;
+  }
+  .entry-meta em { font-style: italic; color: var(--ink-soft); }
+
+  .entry-side {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .entry-src { display: none; }
+  .entry-day { color: var(--ink-soft); }
+
+  .stamp {
+    font-family: 'Courier Prime', monospace;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--red);
+    border: 1.5px solid var(--red);
+    border-radius: 2px;
+    padding: 2.5px 6px 2px;
+    transform: rotate(-3.5deg);
+    opacity: .82;
+  }
+  .entry:hover .stamp { opacity: 1; }
+
+  .entry-go {
+    flex-shrink: 0;
+    font-family: 'Courier Prime', monospace;
+    font-size: 10.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--red);
+    opacity: 0;
+    transform: translateX(-5px);
+    transition: opacity .18s ease, transform .18s ease;
+    display: none;
+  }
+  .entry:hover .entry-go, .entry:focus-visible .entry-go { opacity: 1; transform: none; }
+
+  @media (min-width: 640px) {
+    .entry-src { display: inline; }
+    .entry-go { display: inline; }
+  }
+
+  /* Staggered set of the day's fresh postings, like type dropping in. */
+  #fresh .entry {
+    opacity: 0;
+    animation: settle .5s cubic-bezier(.2,.7,.3,1) forwards;
+  }
+  #fresh .entry:nth-child(1) { animation-delay: .04s; }
+  #fresh .entry:nth-child(2) { animation-delay: .09s; }
+  #fresh .entry:nth-child(3) { animation-delay: .14s; }
+  #fresh .entry:nth-child(4) { animation-delay: .19s; }
+  #fresh .entry:nth-child(5) { animation-delay: .24s; }
+  #fresh .entry:nth-child(6) { animation-delay: .29s; }
+  #fresh .entry:nth-child(n+7) { animation-delay: .33s; }
+  @keyframes settle {
+    from { opacity: 0; transform: translateY(-7px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* ----------------------------------------------------------- archive */
+
+  .group { border-bottom: 1px solid var(--rule); }
+  .group summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 2px;
+    cursor: pointer;
+    list-style: none;
+    font-family: 'Courier Prime', monospace;
+    font-size: 11.5px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .group summary::-webkit-details-marker { display: none; }
+  .group summary:hover .g-date { color: var(--red); }
+  .g-mark {
+    width: 9px; height: 9px;
+    border: 1.5px solid var(--ink-soft);
+    flex-shrink: 0;
+    position: relative;
+    transition: transform .25s ease, background .2s ease;
+  }
+  .g-mark::before {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    background: var(--red);
+    opacity: 0;
+    transition: opacity .2s ease;
+  }
+  .group[open] .g-mark { transform: rotate(45deg); }
+  .group[open] .g-mark::before { opacity: 1; }
+  .g-date { flex: 1; color: var(--ink); transition: color .18s ease; }
+  .g-count { color: var(--ink-faint); }
+  .group .entries { padding-bottom: 10px; }
+  .group .entry:last-child { border-bottom: 0; }
+
+  /* ------------------------------------------------------------- misc */
+
+  .void {
+    font-style: italic;
+    color: var(--ink-faint);
+    padding: 22px 2px;
+    margin: 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+
+  footer {
+    margin-top: 62px;
+    padding-top: 20px;
+    border-top: 5px solid var(--ink);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 20px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 10.5px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  footer a { color: var(--ink-soft); }
+
+  [hidden] { display: none !important; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    #fresh .entry { opacity: 1; }
+  }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <h1>T&amp;T JOB<span>DIGEST</span></h1>
-      <div class="timestamp"><span class="dot"></span>UPDATED {timestamp}</div>
+  <div class="sheet">
+
+    <header class="masthead">
+      <div class="ears">
+        <span>Vol. I &middot; No. __ISSUE__</span>
+        <span class="price">Free to read</span>
+      </div>
+      <div class="hairline"></div>
+      <div class="thickline"></div>
+
+      <h1><span class="the">The Trinidad &amp; Tobago</span>Job <em>Digest</em></h1>
+
+      <div class="dateline">
+        <span>__DATELINE__</span>
+        <span>Filed <b>__TIME__</b></span>
+        <span>__TOTAL__ postings on file</span>
+      </div>
+      <div class="thickline"></div>
+      <div class="hairline" style="margin-top:3px"></div>
     </header>
 
-    <div class="panel">
-      <p class="panel-title tech">&#9889; Tech &amp; IT positions ({len(it_jobs)})</p>
-      <div class="board">
-        {it_rows}
+    <div class="lede">
+      <p>Every vacancy this bulletin has ever seen is kept below &mdash; today's
+      catch is set at the top, and each earlier day is bundled into the archive
+      beneath it. Nothing is thrown out. Scraped at dawn from IslandJobHunt and
+      CaribbeanJobs, sorted by machine, printed without comment.</p>
+      <div class="tally">
+        <div><span class="n hot">__NEW_COUNT__</span><span class="l">New today</span></div>
+        <div><span class="n">__TECH_TOTAL__</span><span class="l">Tech on file</span></div>
+        <div><span class="n">__TOTAL__</span><span class="l">All on file</span></div>
       </div>
     </div>
 
-    <div class="panel">
-      <p class="panel-title">All other positions ({len(other_jobs)})</p>
-      <div class="board">
-        {other_rows}
+    <div class="controls">
+      <label class="search">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <circle cx="6" cy="6" r="4.6" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M9.5 9.5L13 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <input id="q" type="search" placeholder="Search the classifieds" autocomplete="off" aria-label="Search postings">
+      </label>
+      <div class="chips" role="group" aria-label="Filter by field">
+        <button class="chip" data-cat="all" aria-pressed="true">All</button>
+        <button class="chip" data-cat="it" aria-pressed="false">Tech</button>
+        <button class="chip" data-cat="other" aria-pressed="false">Everything else</button>
       </div>
     </div>
 
-    <footer>Auto-generated daily from IslandJobHunt &amp; CaribbeanJobs &middot; Trinidad &amp; Tobago, last 24h</footer>
+    <section data-section id="today">
+      <div class="sec-head">
+        <h2>Posted Today</h2>
+        <span class="fill"></span>
+        <span class="n"><span class="sec-count">__NEW_COUNT__</span> listed</span>
+      </div>
+      <p class="sec-sub">Fresh to the archive as of this morning's run.</p>
+      <div class="entries" id="fresh">
+__NEW_ENTRIES__
+      </div>
+      <p class="void sec-empty" hidden>Nothing here matches that.</p>
+    </section>
+
+    <section data-section id="archive">
+      <div class="sec-head">
+        <h2>Back Issues</h2>
+        <span class="fill"></span>
+        <span class="n"><span class="sec-count">__ARCHIVE_COUNT__</span> kept</span>
+      </div>
+      <p class="sec-sub">Every previous day, in full. Older links may have expired at the source.</p>
+__ARCHIVE_GROUPS__
+      <p class="void sec-empty" hidden>Nothing in the archive matches that.</p>
+    </section>
+
+    <footer>
+      <span>Compiled daily at 06:00 AST</span>
+      <span>Sources: IslandJobHunt &middot; CaribbeanJobs</span>
+      <span>Set in Bodoni &amp; Newsreader</span>
+    </footer>
+
   </div>
+
+<script>
+  (function () {
+    var q = document.getElementById('q');
+    var chips = Array.prototype.slice.call(document.querySelectorAll('.chip'));
+    var entries = Array.prototype.slice.call(document.querySelectorAll('.entry'));
+    var groups = Array.prototype.slice.call(document.querySelectorAll('.group'));
+    var sections = Array.prototype.slice.call(document.querySelectorAll('[data-section]'));
+    var cat = 'all';
+
+    function visible(root) {
+      return root.querySelectorAll('.entry:not([hidden])').length;
+    }
+
+    function apply() {
+      var term = q.value.trim().toLowerCase();
+
+      entries.forEach(function (e) {
+        var okCat = cat === 'all' || e.dataset.cat === cat;
+        var okTerm = !term || e.dataset.q.indexOf(term) !== -1;
+        e.hidden = !(okCat && okTerm);
+      });
+
+      groups.forEach(function (g) {
+        var n = visible(g);
+        g.hidden = n === 0;
+        var label = g.querySelector('.g-count');
+        if (label) label.textContent = n + (n === 1 ? ' posting' : ' postings');
+        if (term && n) g.open = true;
+      });
+
+      var filtering = Boolean(term) || cat !== 'all';
+
+      sections.forEach(function (s) {
+        var n = visible(s);
+        // Only speak up about "no matches" while a filter is actually on -
+        // an empty day already prints its own notice.
+        var empty = s.querySelector('.sec-empty');
+        if (empty) empty.hidden = !(filtering && n === 0);
+        var count = s.querySelector('.sec-count');
+        if (count) count.textContent = n;
+      });
+    }
+
+    q.addEventListener('input', apply);
+    chips.forEach(function (c) {
+      c.addEventListener('click', function () {
+        cat = c.dataset.cat;
+        chips.forEach(function (o) { o.setAttribute('aria-pressed', String(o === c)); });
+        apply();
+      });
+    });
+  })();
+</script>
 </body>
 </html>"""
+
+
+def generate_html(new_jobs, archive, run_dt, output_path="docs/index.html"):
+    """Renders the whole archive - today's additions on top, every previous
+    day kept below in collapsible back issues."""
+    new_keys = {job_key(j) for j in new_jobs}
+    older = [j for j in archive if job_key(j) not in new_keys]
+
+    new_entries = "\n".join(_entry_html(j) for j in _sorted_for_display(new_jobs))
+    if not new_entries:
+        new_entries = ('        <p class="void">No fresh postings turned up this '
+                       'morning. The back issues below are still open for business.</p>')
+
+    tech_total = sum(1 for j in archive if j.get("category") == "it")
+    issue_no = len({_seen_date(j) for j in archive if _seen_date(j)}) or 1
+    dateline = f"{run_dt.strftime('%A')}, {run_dt.day} {MONTHS[run_dt.month - 1]} {run_dt.year}"
+
+    page = (PAGE_TEMPLATE
+            .replace("__NEW_ENTRIES__", new_entries)
+            .replace("__ARCHIVE_GROUPS__", _archive_groups_html(older))
+            .replace("__NEW_COUNT__", str(len(new_jobs)))
+            .replace("__ARCHIVE_COUNT__", str(len(older)))
+            .replace("__TECH_TOTAL__", str(tech_total))
+            .replace("__TOTAL__", str(len(archive)))
+            .replace("__ISSUE__", str(issue_no))
+            .replace("__DATELINE__", dateline)
+            .replace("__TIME__", run_dt.strftime("%H:%M UTC")))
 
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
@@ -463,7 +1065,35 @@ def generate_html(digest, output_path="docs/index.html"):
     print(f"Wrote {output_path}")
 
 
+def _notification_text(new_jobs, archive):
+    """Body of the morning push. Always leads with how many jobs were added
+    to the archive on this run."""
+    if not new_jobs:
+        return (f"0 new jobs added this morning.\n"
+                f"{len(archive)} postings still on file.")
+
+    tech = [j for j in new_jobs if j.get("category") == "it"]
+    lines = [f"{len(new_jobs)} new job{'' if len(new_jobs) == 1 else 's'} added this morning"
+             f" ({len(tech)} tech) | {len(archive)} on file", ""]
+
+    for job in _sorted_for_display(new_jobs)[:8]:
+        mark = "[tech] " if job.get("category") == "it" else ""
+        company = job.get("company") or job.get("source") or ""
+        lines.append(f"- {mark}{job['title']}" + (f" - {company}" if company else ""))
+
+    if len(new_jobs) > 8:
+        lines.append(f"...and {len(new_jobs) - 8} more")
+
+    return "\n".join(lines)
+
+
 def main():
+    run_dt = datetime.now(timezone.utc)
+    run_iso = run_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    archive = load_archive()
+    print(f"Archive: {len(archive)} jobs already on file.")
+
     print("Scraping local job portals...")
     island_listings = scrape_islandjobhunt()
     jobstt_listings = scrape_jobstt()
@@ -475,6 +1105,11 @@ def main():
 
     if not all_listings:
         print("No listing data could be fetched.")
+        # Still refresh the page so the archive stays reachable and dated.
+        generate_html([], archive, run_dt)
+        notify(f"Scrape came back empty - no listings fetched this run.\n"
+               f"{len(archive)} postings still on file.",
+               tags="warning")
         return
 
     print(f"Found {len(all_listings)} listings within the last 24 hours.")
@@ -485,7 +1120,14 @@ def main():
 
     print(f"IT jobs: {len(digest.get('it_jobs', []))} | Other jobs: {len(digest.get('other_jobs', []))}")
 
-    generate_html(digest)
+    archive, new_jobs = merge_into_archive(archive, digest, run_iso)
+    print(f"{len(new_jobs)} of those are new to the archive.")
+
+    save_archive(archive)
+    generate_html(new_jobs, archive, run_dt)
+    notify(_notification_text(new_jobs, archive),
+           title=f"T&T Job Digest - {len(new_jobs)} new",
+           tags="briefcase" if new_jobs else "zzz")
 
 
 if __name__ == "__main__":
