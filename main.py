@@ -19,6 +19,11 @@ NTFY_URL = f"https://ntfy.sh/{NTFY_TOPIC}"
 
 ARCHIVE_PATH = "docs/jobs.json"
 
+# How far back a listing counts as "new" for this digest. Kept in one place so
+# every source shares the same window (and so it can be widened temporarily to
+# check a scraper still extracts listings, independently of the date filter).
+WINDOW_HOURS = 24
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
@@ -53,31 +58,64 @@ def notify(message, title="T&T Job Digest", tags="briefcase"):
         print(f"ntfy: failed to send notification: {e}")
 
 
-def _within_24h(relative_text):
+def _one_line(text):
+    """Collapses whitespace so a listing is guaranteed to occupy exactly one
+    line. main() joins listings with newlines before handing them to Gemini,
+    so a stray newline inside one listing would read as several. Also drops
+    zero-width characters, which some boards sprinkle through job titles and
+    which would otherwise ride through into the archive and the page."""
+    cleaned = re.sub(r"[​-‍﻿]", "", text or "")
+    return re.sub(r"\s+", " ", cleaned).strip()
+
+
+def _within_window(relative_text):
     """Parses IslandJobHunt-style relative time strings like '23min ago',
-    '10h ago', '2d ago', '1w ago', '2m ago' (months) and returns True if
-    the listing is within the last 24 hours."""
+    '10h ago', '2d ago', '1w ago', '2m ago' (months) and returns True if the
+    listing falls inside the digest window."""
     if not relative_text:
         return False
     text = relative_text.lower().strip()
 
-    m = re.search(r"(\d+)\s*min", text)
-    if m:
-        return True  # minutes ago is always within 24h
+    if re.search(r"(\d+)\s*min", text):
+        return True  # minutes ago is inside any sane window
 
-    m = re.search(r"(\d+)\s*h(our)?s?\b", text)
-    if m:
-        return int(m.group(1)) <= 24
-
-    m = re.search(r"(\d+)\s*d(ay)?s?\b", text)
-    if m:
-        return int(m.group(1)) < 1  # "Xd ago" where X >= 1 is already >24h
+    for pattern, hours in (
+        (r"(\d+)\s*h(?:our)?s?\b", 1),
+        (r"(\d+)\s*d(?:ay)?s?\b", 24),
+        (r"(\d+)\s*w(?:eek)?s?\b", 24 * 7),
+        (r"(\d+)\s*mo(?:nth)?s?\b", 24 * 30),
+    ):
+        m = re.search(pattern, text)
+        if m:
+            return int(m.group(1)) * hours <= WINDOW_HOURS
 
     if "today" in text:
         return True
 
-    # weeks/months ago are always outside 24h
     return False
+
+
+def _day_cutoff():
+    """Start of the digest window for sources that only publish a date (no
+    clock time). Matches the CaribbeanJobs convention: midnight of yesterday,
+    so a listing dated today or yesterday still counts as 'within 24h'."""
+    return (datetime.now() - timedelta(hours=WINDOW_HOURS)).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
+
+
+def _looks_blocked(body):
+    """True if a response is a bot/JS challenge rather than real content.
+    Pin.tt and Eve Caribbean sit behind Cloudflare - they answer plain
+    requests today, but a CI runner IP is far likelier to get challenged, so
+    these scrapers must recognise a wall and bow out quietly instead of
+    reporting zero listings as if the sites were simply empty."""
+    if len(body) > 40000:
+        return False  # a challenge page is always small
+    return bool(re.search(
+        r"cf-browser-verification|Just a moment|Checking your browser|"
+        r"Enable JavaScript and cookies|Javascript is required",
+        body, re.I))
 
 
 def scrape_islandjobhunt():
@@ -121,12 +159,13 @@ def scrape_islandjobhunt():
             time_match = re.search(r"(\d+\s*(?:min|h|hours?|d|days?|w|weeks?|m|mo|months?)\s*ago)", block_text)
             time_str = time_match.group(1) if time_match else ""
 
-            if not _within_24h(time_str):
+            if not _within_window(time_str):
                 continue
 
             full_link = "https://islandjobhunt.com" + href
             listings.append(
-                f"Source: IslandJobHunt | Listing: {title} | Details: {block_text} | URL: {full_link}"
+                f"Source: IslandJobHunt | Listing: {_one_line(title)} | "
+                f"Details: {_one_line(block_text)} | URL: {full_link}"
             )
 
         print(f"IslandJobHunt: {len(matches)} total listings found, {len(listings)} within last 24h.")
@@ -136,14 +175,164 @@ def scrape_islandjobhunt():
         return []
 
 
+def _jsonld_jobposting(soup):
+    """Pulls the schema.org JobPosting object out of a page's JSON-LD, coping
+    with the usual shapes: a bare object, a list, or an @graph wrapper."""
+    for tag in soup.find_all("script", type="application/ld+json"):
+        raw = tag.string or tag.get_text() or ""
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError:
+            continue
+
+        candidates = data if isinstance(data, list) else [data]
+        if isinstance(data, dict) and isinstance(data.get("@graph"), list):
+            candidates = data["@graph"]
+
+        for obj in candidates:
+            if isinstance(obj, dict) and obj.get("@type") == "JobPosting":
+                return obj
+    return None
+
+
+def _jsonld_location(posting):
+    """Flattens JobPosting.jobLocation into a readable place string."""
+    loc = posting.get("jobLocation")
+    if isinstance(loc, list):
+        loc = loc[0] if loc else None
+    if not isinstance(loc, dict):
+        return ""
+
+    addr = loc.get("address")
+    if isinstance(addr, str):
+        return addr
+    if not isinstance(addr, dict):
+        return ""
+
+    parts = [addr.get("addressLocality"), addr.get("addressRegion"),
+             addr.get("addressCountry")]
+    return ", ".join(p for p in parts if isinstance(p, str) and p.strip())
+
+
 def scrape_jobstt():
-    """JobsTT.com currently sits behind a JavaScript/bot-detection challenge
-    (its homepage returns 'You are being redirected... Javascript is
-    required' to plain HTTP clients). requests + BeautifulSoup cannot get
-    past this - it would need a headless browser like Playwright. Skipping
-    for now rather than silently returning garbage."""
-    print("JobsTT: skipped (site requires JS / blocks non-browser requests).")
-    return []
+    """Scrapes recent listings from JobsTT.
+
+    JobsTT used to answer plain HTTP clients with a JavaScript/bot challenge,
+    which is why this was previously skipped - it no longer does. Rather than
+    walking the paginated listing HTML (10 jobs a page), we read
+    sitemap-job.xml, which names every job URL with a <lastmod> stamp, then
+    fetch only the recently-touched ones. Each job page carries a schema.org
+    JobPosting block, so title/company/location/datePosted come from JSON-LD
+    instead of guessed selectors."""
+    sitemap = "https://jobstt.com/sitemap-job.xml"
+    try:
+        res = requests.get(sitemap, headers=HEADERS, timeout=20)
+        if res.status_code != 200:
+            print(f"JobsTT sitemap returned status {res.status_code}, skipping.")
+            return []
+
+        entries = re.findall(
+            r"<url>\s*<loc>(.*?)</loc>.*?<lastmod>(.*?)</lastmod>\s*</url>",
+            res.text, re.S)
+        if not entries:
+            # Fall back to bare <loc> list if the sitemap drops <lastmod>.
+            entries = [(loc, "") for loc in re.findall(r"<loc>(.*?)</loc>", res.text)]
+
+        # <lastmod> also moves when an employer edits an old posting, so it is
+        # only a cheap prefilter here - the authoritative date is datePosted
+        # on the job page itself. Allow a few days of slack past the window.
+        prefilter = datetime.now(timezone.utc) - timedelta(hours=WINDOW_HOURS + 72)
+        recent = []
+        for loc, lastmod in entries:
+            if not loc.startswith("http"):
+                continue
+            if not lastmod:
+                recent.append((loc, None))
+                continue
+            try:
+                stamp = datetime.fromisoformat(lastmod.strip())
+            except ValueError:
+                recent.append((loc, None))
+                continue
+            if stamp.tzinfo is None:
+                stamp = stamp.replace(tzinfo=timezone.utc)
+            if stamp >= prefilter:
+                recent.append((loc, stamp))
+
+        recent.sort(key=lambda pair: pair[1] or datetime.min.replace(tzinfo=timezone.utc),
+                    reverse=True)
+        # Bound the per-run request count (one fetch per candidate job).
+        max_fetches = 25
+        candidates, dropped = recent[:max_fetches], max(0, len(recent) - max_fetches)
+        print(f"JobsTT: {len(entries)} jobs in sitemap, {len(recent)} touched recently"
+              + (f" ({dropped} beyond the {max_fetches}-fetch cap not checked)" if dropped else "")
+              + ".")
+        recent = candidates
+
+        cutoff = _day_cutoff()
+        listings = []
+        for loc, _stamp in recent:
+            try:
+                page = requests.get(loc, headers=HEADERS, timeout=20)
+            except requests.RequestException as e:
+                print(f"JobsTT: failed to fetch {loc}: {e}")
+                continue
+            if page.status_code != 200:
+                continue
+
+            soup = BeautifulSoup(page.text, "html.parser")
+            posting = _jsonld_jobposting(soup)
+            if not posting:
+                continue
+
+            posted_raw = (posting.get("datePosted") or "").strip()
+            if not posted_raw:
+                continue
+            try:
+                # datePosted is date-only ("2026-08-06"); take the date part
+                # of anything longer so a timestamped variant still parses.
+                posted = datetime.fromisoformat(posted_raw.replace("Z", "")[:19])
+            except ValueError:
+                continue
+            if posted.tzinfo is not None:
+                posted = posted.replace(tzinfo=None)
+            if posted < cutoff:
+                continue
+
+            title = (posting.get("title") or "").strip()
+            if not title:
+                title = soup.title.get_text(strip=True).replace(" - JobsTT", "") if soup.title else ""
+            if not title:
+                continue
+
+            org = posting.get("hiringOrganization") or {}
+            company = (org.get("name") or "").strip() if isinstance(org, dict) else ""
+            location = _jsonld_location(posting)
+            employment = posting.get("employmentType") or ""
+            if isinstance(employment, list):
+                employment = ", ".join(str(e) for e in employment)
+
+            details = " | ".join(p for p in [
+                f"Company: {company}" if company else "",
+                f"Location: {location}" if location else "",
+                f"Type: {employment}" if employment else "",
+                f"Posted: {posted.date().isoformat()}",
+            ] if p)
+
+            listings.append(
+                f"Source: JobsTT | Listing: {_one_line(title)} | "
+                f"Details: {_one_line(details)} | URL: {loc}"
+            )
+
+        print(f"JobsTT: {len(listings)} listings within last 24h.")
+        return listings[:40]
+    except requests.RequestException as e:
+        print(f"Error scraping JobsTT: {e}")
+        return []
+
+
+CARIBBEAN_LINK = re.compile(r"-Job-\d+\.aspx")  # /Some-Job-Title-Job-233666.aspx
+CARIBBEAN_UPDATED = re.compile(r"Updated (\d{2}/\d{2}/\d{4})")
 
 
 def scrape_caribbeanjobs():
@@ -157,51 +346,304 @@ def scrape_caribbeanjobs():
             return []
 
         soup = BeautifulSoup(res.text, "html.parser")
+
+        # Each result card links to the same job twice - once on the title and
+        # once on a "Show More" control - so group by URL and keep the longest
+        # link text, which is the real title.
+        grouped = {}
+        for a in soup.find_all("a", href=CARIBBEAN_LINK):
+            grouped.setdefault(a["href"], []).append(a)
+
+        if not grouped:
+            print("CaribbeanJobs: 0 job links found - page structure may have changed.")
+            return []
+
+        cutoff = _day_cutoff()
         listings = []
 
-        # Job links look like /Some-Job-Title-Job-233666.aspx
-        title_links = soup.find_all("a", href=re.compile(r"-Job-\d+\.aspx"))
-
-        cutoff = datetime.now() - timedelta(hours=24)
-
-        for link in title_links:
-            title = link.get_text(strip=True)
+        for href, anchors in grouped.items():
+            title = _best_anchor_text(anchors)
             if not title:
                 continue
 
-            # The "Updated DD/MM/YYYY" text and company name live in a
-            # nearby sibling block; walk up a few levels and grab all text.
-            container = link
-            for _ in range(4):
-                if container.parent is None:
-                    break
-                container = container.parent
-
-            block_text = " | ".join(container.stripped_strings)
-
-            date_match = re.search(r"Updated (\d{2}/\d{2}/\d{4})", block_text)
-            if not date_match:
+            # Take the "Updated DD/MM/YYYY" stamp from the smallest block that
+            # holds this job alone. Walking up a fixed number of levels used to
+            # overshoot into the whole results list, where the first stamp found
+            # belonged to some other (often newer) job.
+            block_text = _ad_card_text(anchors[0], CARIBBEAN_LINK, CARIBBEAN_UPDATED)
+            if not block_text:
                 continue
 
             try:
-                updated_date = datetime.strptime(date_match.group(1), "%d/%m/%Y")
+                updated_date = datetime.strptime(
+                    CARIBBEAN_UPDATED.search(block_text).group(1), "%d/%m/%Y")
             except ValueError:
                 continue
 
-            if updated_date < cutoff.replace(hour=0, minute=0, second=0, microsecond=0):
+            if updated_date < cutoff:
                 continue
 
-            full_link = link["href"]
+            full_link = href
             if not full_link.startswith("http"):
                 full_link = "https://www.caribbeanjobs.com" + full_link
 
             listings.append(
-                f"Source: CaribbeanJobs | Listing: {title} | Details: {block_text[:250]} | URL: {full_link}"
+                f"Source: CaribbeanJobs | Listing: {_one_line(title)} | "
+                f"Details: {_one_line(block_text)[:250]} | URL: {full_link}"
             )
 
+        print(f"CaribbeanJobs: {len(grouped)} jobs found, {len(listings)} within last 24h.")
         return listings[:40]
     except requests.RequestException as e:
         print(f"Error scraping CaribbeanJobs: {e}")
+        return []
+
+
+def _best_anchor_text(anchors):
+    """Listing rows usually link twice - once wrapping a thumbnail (no text)
+    and once wrapping the title. Pick the longest text of the group."""
+    texts = [a.get_text(" ", strip=True) for a in anchors]
+    return max(texts, key=len) if texts else ""
+
+
+def _ad_card_text(anchor, link_pattern, stamp_pattern, max_levels=6):
+    """Walks up from a listing link to the smallest ancestor that carries the
+    posting stamp, and refuses to walk into a container holding more than one
+    listing - otherwise a card without its own stamp silently inherits the
+    neighbouring ad's date, which is exactly the bug that makes a 24h filter
+    quietly wrong."""
+    node = anchor
+    for _ in range(max_levels):
+        if node.parent is None:
+            return ""
+        node = node.parent
+
+        hrefs = {a["href"] for a in node.find_all("a", href=True)
+                 if link_pattern.search(a["href"])}
+        if len(hrefs) > 1:
+            return ""  # walked into a multi-listing container - give up
+
+        text = " | ".join(node.stripped_strings)
+        if stamp_pattern.search(text):
+            return text
+    return ""
+
+
+PINTT_AD = re.compile(r"/adv/\d+_")
+PINTT_STAMP = re.compile(r"\b(\d{2})\.(\d{2})\.(20\d\d)\s+(\d{2}):(\d{2})")
+
+
+def scrape_pintt():
+    """Scrapes recent job ads from Pin.tt, a local classifieds site.
+
+    Ads live at /adv/<id>_<slug>/ and every card carries a 'dd.mm.yyyy HH:MM'
+    posting stamp - minute-level precision, so unlike the other sources this
+    one needs no relative-time or midnight-rounding guesswork."""
+    url = "https://pin.tt/jobs/"
+    try:
+        res = requests.get(url, headers=HEADERS, timeout=20)
+        if res.status_code != 200:
+            print(f"Pin.tt returned status {res.status_code}, skipping.")
+            return []
+        if _looks_blocked(res.text):
+            print("Pin.tt: blocked by a Cloudflare challenge this run, skipping.")
+            return []
+
+        soup = BeautifulSoup(res.text, "html.parser")
+
+        grouped = {}
+        for a in soup.find_all("a", href=True):
+            if PINTT_AD.search(a["href"]):
+                grouped.setdefault(a["href"], []).append(a)
+
+        if not grouped:
+            print("Pin.tt: 0 ad links found - page structure may have changed.")
+            return []
+
+        cutoff = datetime.now() - timedelta(hours=WINDOW_HOURS)
+        listings = []
+        undated = 0
+
+        for href, anchors in grouped.items():
+            title = _best_anchor_text(anchors)
+            if not title:
+                continue
+
+            card = _ad_card_text(anchors[0], PINTT_AD, PINTT_STAMP)
+            if not card:
+                # Promoted/VIP ads render without their own stamp; skipping is
+                # better than dating them from a neighbour.
+                undated += 1
+                continue
+
+            m = PINTT_STAMP.search(card)
+            day, month, year, hour, minute = (int(g) for g in m.groups())
+            try:
+                posted = datetime(year, month, day, hour, minute)
+            except ValueError:
+                continue
+
+            if posted < cutoff:
+                continue
+
+            full_link = href if href.startswith("http") else "https://pin.tt" + href
+            listings.append(
+                f"Source: Pin.tt | Listing: {_one_line(title)} | "
+                f"Details: {_one_line(card)[:250]} | URL: {full_link}"
+            )
+
+        print(f"Pin.tt: {len(grouped)} ads found, {len(listings)} within last 24h "
+              f"({undated} skipped for having no own timestamp).")
+        return listings[:40]
+    except requests.RequestException as e:
+        print(f"Error scraping Pin.tt: {e}")
+        return []
+
+
+EMPLOYTT_LINK = re.compile(r"/jobs/view/\d+")
+EMPLOYTT_DATE = re.compile(r"\b(\d{2})/(\d{2})/(20\d\d)\b")
+
+
+def _employtt_date(match):
+    """EmployTT prints dates month-first (a row's '08/14/2026' pins it down)."""
+    month, day, year = (int(g) for g in match)
+    try:
+        return datetime(year, month, day)
+    except ValueError:
+        return None
+
+
+def scrape_employtt():
+    """Scrapes recent listings from EmployTT, the government employment portal.
+
+    Each row exposes three US-format (mm/dd/yyyy) dates - created, published
+    and application deadline. The middle one is the published date: it is what
+    the site's own 'N days ago' label counts from, which is how it was
+    identified. Listings whose deadline has passed are dropped."""
+    url = "https://employtt.gov.tt/jobs/list"
+    try:
+        res = requests.get(url, headers=HEADERS, timeout=20)
+        if res.status_code != 200:
+            print(f"EmployTT returned status {res.status_code}, skipping.")
+            return []
+
+        soup = BeautifulSoup(res.text, "html.parser")
+
+        grouped = {}
+        for a in soup.find_all("a", href=True):
+            if EMPLOYTT_LINK.search(a["href"]):
+                grouped.setdefault(a["href"], []).append(a)
+
+        if not grouped:
+            print("EmployTT: 0 job links found - page structure may have changed.")
+            return []
+
+        cutoff = _day_cutoff()
+        today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        listings = []
+
+        for href, anchors in grouped.items():
+            title = _best_anchor_text(anchors)
+            if not title:
+                continue
+
+            # Climb to the row that actually holds the date columns.
+            node, row_text = anchors[0], ""
+            for _ in range(5):
+                if node.parent is None:
+                    break
+                node = node.parent
+                candidate = " | ".join(node.stripped_strings)
+                if len(EMPLOYTT_DATE.findall(candidate)) >= 2:
+                    row_text = candidate
+                    break
+            if not row_text:
+                continue
+
+            dates = [d for d in (_employtt_date(m)
+                                 for m in EMPLOYTT_DATE.findall(row_text)) if d]
+            if len(dates) < 2:
+                continue
+
+            posted = dates[1]
+            if posted < cutoff:
+                continue
+            if len(dates) > 2 and dates[2] < today:
+                continue  # application deadline already passed
+
+            full_link = href if href.startswith("http") else "https://employtt.gov.tt" + href
+            listings.append(
+                f"Source: EmployTT | Listing: {_one_line(title)} | "
+                f"Details: {_one_line(row_text)[:250]} | URL: {full_link}"
+            )
+
+        print(f"EmployTT: {len(grouped)} jobs found, {len(listings)} within last 24h.")
+        return listings[:40]
+    except requests.RequestException as e:
+        print(f"Error scraping EmployTT: {e}")
+        return []
+
+
+EVE_LINK = re.compile(r"/tt/job/[a-z0-9-]+/?$", re.I)
+EVE_DATE = re.compile(r"Listed\s+([A-Z][a-z]+\s+\d{1,2},\s*20\d\d)")
+
+
+def scrape_evecaribbean():
+    """Scrapes recent listings from Eve Caribbean, the job board run by Eve
+    Anderson Recruitment. Cards are labelled 'Listed <Month D, YYYY>'."""
+    url = "https://evecaribbean.com/tt/jobs/"
+    try:
+        res = requests.get(url, headers=HEADERS, timeout=20)
+        if res.status_code != 200:
+            print(f"Eve Caribbean returned status {res.status_code}, skipping.")
+            return []
+        if _looks_blocked(res.text):
+            print("Eve Caribbean: blocked by a Cloudflare challenge this run, skipping.")
+            return []
+
+        soup = BeautifulSoup(res.text, "html.parser")
+
+        grouped = {}
+        for a in soup.find_all("a", href=True):
+            if EVE_LINK.search(a["href"]):
+                grouped.setdefault(a["href"], []).append(a)
+
+        if not grouped:
+            print("Eve Caribbean: 0 job links found - page structure may have changed.")
+            return []
+
+        cutoff = _day_cutoff()
+        listings = []
+
+        for href, anchors in grouped.items():
+            title = _best_anchor_text(anchors)
+            if not title:
+                continue
+
+            card = _ad_card_text(anchors[0], EVE_LINK, EVE_DATE)
+            if not card:
+                continue
+
+            try:
+                posted = datetime.strptime(
+                    EVE_DATE.search(card).group(1).replace(",", ", ").replace("  ", " "),
+                    "%B %d, %Y")
+            except ValueError:
+                continue
+
+            if posted < cutoff:
+                continue
+
+            full_link = href if href.startswith("http") else "https://evecaribbean.com" + href
+            listings.append(
+                f"Source: EveCaribbean | Listing: {_one_line(title)} | "
+                f"Details: {_one_line(card)[:250]} | URL: {full_link}"
+            )
+
+        print(f"Eve Caribbean: {len(grouped)} jobs found, {len(listings)} within last 24h.")
+        return listings[:40]
+    except requests.RequestException as e:
+        print(f"Error scraping Eve Caribbean: {e}")
         return []
 
 
@@ -217,9 +659,16 @@ def summarize_and_filter(raw_data_string, max_retries=3):
     hours from these portals:
     1. IslandJobHunt.com
     2. CaribbeanJobs.com
+    3. JobsTT.com
+    4. Pin.tt
+    5. EmployTT (employtt.gov.tt)
+    6. Eve Caribbean (evecaribbean.com)
 
     YOUR TASK:
-    1. Remove duplicate listings (same title + company appearing more than once).
+    1. Remove duplicate listings (same title + company appearing more than
+       once). Employers routinely post the same vacancy to several of these
+       portals, so collapse cross-posted duplicates too: keep one entry and
+       prefer the one with the most complete company/location detail.
     2. Split every listing into one of two lists: "it_jobs" (Software
        Engineering, Web Development, IT Support, Systems Administration,
        Networking, Database/Data, Cybersecurity, Cloud, Tech Lead, Helpdesk,
@@ -239,6 +688,9 @@ def summarize_and_filter(raw_data_string, max_retries=3):
     }}
 
     Use "" for company/location if genuinely not present in the raw text.
+    For "source", copy the value after "Source:" on that listing's raw line
+    verbatim (IslandJobHunt, CaribbeanJobs, JobsTT, Pin.tt, EmployTT or
+    EveCaribbean) - do not invent or reword it.
 
     RAW SCRAPED DATA:
     {raw_data_string}
@@ -1095,13 +1547,29 @@ def main():
     print(f"Archive: {len(archive)} jobs already on file.")
 
     print("Scraping local job portals...")
-    island_listings = scrape_islandjobhunt()
-    jobstt_listings = scrape_jobstt()
-    caribbean_listings = scrape_caribbeanjobs()
+    # One scraper failing must not sink the run, so each returns [] on error
+    # and the breakdown below makes a silently-empty source obvious in the logs.
+    sources = [
+        ("IslandJobHunt", scrape_islandjobhunt),
+        ("JobsTT", scrape_jobstt),
+        ("CaribbeanJobs", scrape_caribbeanjobs),
+        ("Pin.tt", scrape_pintt),
+        ("EmployTT", scrape_employtt),
+        ("EveCaribbean", scrape_evecaribbean),
+    ]
 
-    print(f"Breakdown -> IslandJobHunt: {len(island_listings)} | JobsTT: {len(jobstt_listings)} | CaribbeanJobs: {len(caribbean_listings)}")
+    all_listings = []
+    breakdown = []
+    for name, scraper in sources:
+        try:
+            found = scraper()
+        except Exception as e:  # a parser change shouldn't kill the whole digest
+            print(f"{name}: scraper raised {type(e).__name__}: {e}")
+            found = []
+        breakdown.append(f"{name}: {len(found)}")
+        all_listings.extend(found)
 
-    all_listings = island_listings + jobstt_listings + caribbean_listings
+    print("Breakdown -> " + " | ".join(breakdown))
 
     if not all_listings:
         print("No listing data could be fetched.")
