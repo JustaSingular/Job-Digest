@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-10T01:23:18Z",
-  "count": 30,
+  "updated": "2026-08-10T11:00:48Z",
+  "count": 33,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -271,6 +271,33 @@
       "link": "https://www.caribbeanjobs.com/Service-Technician-Job-236026.aspx",
       "category": "other",
       "first_seen": "2026-08-09T14:45:26Z"
+    },
+    {
+      "title": "Avionics Technician Trainee",
+      "company": "Caribbean Airlines",
+      "location": "Piarco",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/588913001-avionics-technician-trainee",
+      "category": "other",
+      "first_seen": "2026-08-10T01:31:25Z"
+    },
+    {
+      "title": "Accounts Receivables Officer",
+      "company": "",
+      "location": "Marabella, Trinidad & Tobago",
+      "source": "EveCaribbean",
+      "link": "https://evecaribbean.com/tt/job/accounts-receivables-officer/",
+      "category": "other",
+      "first_seen": "2026-08-10T01:31:25Z"
+    },
+    {
+      "title": "Diesel Mechanic",
+      "company": "",
+      "location": "Marabella, Trinidad & Tobago",
+      "source": "EveCaribbean",
+      "link": "https://evecaribbean.com/tt/job/diesel-mechanic/",
+      "category": "other",
+      "first_seen": "2026-08-10T01:31:25Z"
     }
   ]
 }
