@@ -1246,15 +1246,47 @@ def _entry_html(job, show_day=False):
 
     stamp = '<span class="stamp">Tech</span>' if is_tech else ""
 
-    return f"""        <a class="entry{' is-tech' if is_tech else ''}" href="{link}" target="_blank" rel="noopener"
-           data-cat="{'it' if is_tech else 'other'}" data-q="{haystack}">
-          <span class="entry-body">
-            <span class="entry-title">{title}</span>
-            <span class="entry-meta">{meta}</span>
+    # Starring and binning are remembered in the reader's browser against this
+    # key, so it has to survive the page being regenerated from scratch twice a
+    # day. The link is what job_key uses for the same reason; the title/company
+    # fallback covers the handful of listings that never carried a URL.
+    key = html_lib.escape(
+        job.get("link") or f"{job.get('title', '')}|{job.get('company', '')}",
+        quote=True)
+
+    return f"""        <div class="entry{' is-tech' if is_tech else ''}"
+             data-cat="{'it' if is_tech else 'other'}" data-q="{haystack}" data-key="{key}">
+          <a class="entry-link" href="{link}" target="_blank" rel="noopener">
+            <span class="entry-body">
+              <span class="entry-title">{title}</span>
+              <span class="entry-meta">{meta}</span>
+            </span>
+            <span class="entry-side">{stamp}<span class="entry-src">{source}</span>{day}</span>
+            <span class="entry-go">Read&nbsp;&rarr;</span>
+          </a>
+          <span class="entry-acts">
+            <button class="act act-fav" type="button" data-act="fav" aria-pressed="false"
+                    aria-label="Save to favourites" title="Save to favourites">
+              <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M8 1.6l1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"
+                      fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="act act-bin" type="button" data-act="bin"
+                    aria-label="Move to trash" title="Move to trash">
+              <svg class="i-bin" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2.8 4.3h10.4M6.2 4.3V2.9h3.6v1.4M4.2 4.3l.6 8.4h6.4l.6-8.4M6.6 6.6v4M9.4 6.6v4"
+                      fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+              <svg class="i-undo" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M3 8a5 5 0 1 1 1.5 3.6" fill="none" stroke="currentColor"
+                      stroke-width="1.4" stroke-linecap="round"/>
+                <path d="M2.6 4.6V8h3.4" fill="none" stroke="currentColor"
+                      stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
           </span>
-          <span class="entry-side">{stamp}<span class="entry-src">{source}</span>{day}</span>
-          <span class="entry-go">Read&nbsp;&rarr;</span>
-        </a>"""
+        </div>"""
 
 
 def _archive_groups_html(jobs):
@@ -1522,6 +1554,12 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     border-color: var(--ink);
   }
 
+  .chip .n { font-variant-numeric: tabular-nums; opacity: .75; }
+  .chip.view { margin-left: 8px; }
+  .chip.view:first-of-type { margin-left: 14px; }
+  .chip.view[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--paper); }
+  #view-bin[aria-pressed="true"] { background: var(--ink-soft); border-color: var(--ink-soft); }
+
   .refresh {
     margin-left: auto;
     display: inline-flex;
@@ -1572,15 +1610,25 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 
   .entries { counter-reset: post; }
 
+  /* The row is a container, not the link itself: the star and bin buttons
+     have to sit outside the anchor rather than nested inside it. */
   .entry {
     position: relative;
     display: flex;
-    align-items: baseline;
-    gap: 16px;
-    padding: 15px 14px 15px 46px;
-    text-decoration: none;
+    align-items: center;
     border-bottom: 1px solid var(--rule-soft);
     transition: background .18s ease, padding-left .18s ease;
+  }
+  .entry-link {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 15px 6px 15px 46px;
+    text-decoration: none;
+    color: inherit;
+    transition: padding-left .18s ease;
   }
   .entry::before {
     counter-increment: post;
@@ -1593,13 +1641,14 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     color: var(--ink-faint);
     transition: color .18s ease;
   }
-  .entry:hover, .entry:focus-visible {
+  .entry:hover, .entry:focus-within {
     background: var(--paper-warm);
-    padding-left: 52px;
     outline: none;
   }
-  .entry:focus-visible { box-shadow: inset 3px 0 0 var(--red); }
-  .entry:hover::before, .entry:focus-visible::before { color: var(--red); }
+  .entry:hover .entry-link, .entry:focus-within .entry-link { padding-left: 52px; }
+  .entry-link:focus-visible { outline: none; }
+  .entry:focus-within { box-shadow: inset 3px 0 0 var(--red); }
+  .entry:hover::before, .entry:focus-within::before { color: var(--red); }
 
   .entry-body { flex: 1; min-width: 0; }
   .entry-title {
@@ -1650,6 +1699,49 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     opacity: .82;
   }
   .entry:hover .stamp { opacity: 1; }
+
+  /* ------------------------------------------------- star & bin buttons */
+
+  .entry-acts {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+    padding-right: 8px;
+  }
+  .act {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 3px;
+    background: transparent;
+    color: var(--ink-faint);
+    cursor: pointer;
+    opacity: .45;
+    transition: opacity .15s ease, color .15s ease, background .15s ease;
+  }
+  .entry:hover .act, .entry:focus-within .act { opacity: 1; }
+  .act:hover { background: var(--paper-deep); color: var(--ink); }
+  .act:focus-visible { outline: 1.5px solid var(--red); outline-offset: 1px; opacity: 1; }
+
+  /* A starred row keeps its mark lit even when the pointer is elsewhere. */
+  .entry.is-fav .act-fav { opacity: 1; color: var(--gold); }
+  .entry.is-fav .act-fav svg path { fill: var(--gold); }
+
+  .act-bin .i-undo { display: none; }
+  .entry.is-binned .act-bin .i-bin { display: none; }
+  .entry.is-binned .act-bin .i-undo { display: block; }
+  .entry.is-binned { opacity: .62; }
+  .entry.is-binned .entry-title { text-decoration: line-through; }
+
+  /* Touch devices have no hover to reveal the controls, so leave them up. */
+  @media (hover: none) {
+    .act { opacity: .8; }
+  }
 
   .entry-go {
     flex-shrink: 0;
@@ -1808,6 +1900,14 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
         <button class="chip" data-cat="it" aria-pressed="false">Tech</button>
         <button class="chip" data-cat="other" aria-pressed="false">Everything else</button>
       </div>
+      <div class="chips" role="group" aria-label="Saved and discarded postings">
+        <button id="view-fav" class="chip view" type="button" aria-pressed="false">
+          Starred <span class="n" id="fav-n">0</span>
+        </button>
+        <button id="view-bin" class="chip view" type="button" aria-pressed="false">
+          Trash <span class="n" id="bin-n">0</span>
+        </button>
+      </div>
       <button id="refresh" class="chip refresh" type="button"
               title="Fetch the latest edition, bypassing your browser's cache">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
@@ -1853,11 +1953,43 @@ __ARCHIVE_GROUPS__
 <script>
   (function () {
     var q = document.getElementById('q');
-    var chips = Array.prototype.slice.call(document.querySelectorAll('.chip'));
+    // Only the category chips - the starred, trash and refresh buttons share
+    // the .chip look but must not be treated as category filters.
+    var chips = Array.prototype.slice.call(document.querySelectorAll('.chip[data-cat]'));
     var entries = Array.prototype.slice.call(document.querySelectorAll('.entry'));
     var groups = Array.prototype.slice.call(document.querySelectorAll('.group'));
     var sections = Array.prototype.slice.call(document.querySelectorAll('[data-section]'));
+    var favBtn = document.getElementById('view-fav');
+    var binBtn = document.getElementById('view-bin');
+    var favCount = document.getElementById('fav-n');
+    var binCount = document.getElementById('bin-n');
     var cat = 'all';
+    var view = 'all';   // 'all' hides binned postings, 'fav' and 'bin' show only those
+
+    // Stars and discards live in the reader's own browser - there is no server
+    // to keep them on. They are keyed by job link so they survive the page
+    // being rebuilt from scratch on every scrape.
+    var STORE = 'jobdigest.marks.v1';
+    var marks = {fav: {}, bin: {}};
+
+    function loadMarks() {
+      try {
+        var raw = window.localStorage.getItem(STORE);
+        if (!raw) return;
+        var saved = JSON.parse(raw);
+        marks.fav = saved.fav || {};
+        marks.bin = saved.bin || {};
+      } catch (e) {
+        // Private browsing and disabled storage both throw here. The page is
+        // still perfectly usable without memory, so carry on unmarked.
+      }
+    }
+
+    function saveMarks() {
+      try {
+        window.localStorage.setItem(STORE, JSON.stringify(marks));
+      } catch (e) {}
+    }
 
     function visible(root) {
       return root.querySelectorAll('.entry:not([hidden])').length;
@@ -1865,12 +1997,37 @@ __ARCHIVE_GROUPS__
 
     function apply() {
       var term = q.value.trim().toLowerCase();
+      var fav = 0, binned = 0;
 
       entries.forEach(function (e) {
+        var key = e.dataset.key;
+        var isFav = !!marks.fav[key];
+        var isBin = !!marks.bin[key];
+        if (isFav && !isBin) fav++;
+        if (isBin) binned++;
+
+        e.classList.toggle('is-fav', isFav);
+        e.classList.toggle('is-binned', isBin);
+
+        var favBtnEl = e.querySelector('.act-fav');
+        favBtnEl.setAttribute('aria-pressed', String(isFav));
+        favBtnEl.title = isFav ? 'Remove from favourites' : 'Save to favourites';
+        favBtnEl.setAttribute('aria-label', favBtnEl.title);
+
+        var binBtnEl = e.querySelector('.act-bin');
+        binBtnEl.title = isBin ? 'Restore from trash' : 'Move to trash';
+        binBtnEl.setAttribute('aria-label', binBtnEl.title);
+
+        var okView = view === 'bin' ? isBin
+                   : view === 'fav' ? (isFav && !isBin)
+                   : !isBin;
         var okCat = cat === 'all' || e.dataset.cat === cat;
         var okTerm = !term || e.dataset.q.indexOf(term) !== -1;
-        e.hidden = !(okCat && okTerm);
+        e.hidden = !(okView && okCat && okTerm);
       });
+
+      favCount.textContent = fav;
+      binCount.textContent = binned;
 
       groups.forEach(function (g) {
         var n = visible(g);
@@ -1880,14 +2037,25 @@ __ARCHIVE_GROUPS__
         if (term && n) g.open = true;
       });
 
-      var filtering = Boolean(term) || cat !== 'all';
+      var filtering = Boolean(term) || cat !== 'all' || view !== 'all';
+
+      // A search or category filter that catches nothing is a different
+      // situation from an empty trash, and deserves different wording.
+      var narrowed = Boolean(term) || cat !== 'all';
+      var emptyNote = narrowed ? 'Nothing here matches that.'
+                    : view === 'bin' ? 'The trash is empty.'
+                    : view === 'fav' ? 'No favourites yet — tap a star to keep one here.'
+                    : 'Nothing here matches that.';
 
       sections.forEach(function (s) {
         var n = visible(s);
         // Only speak up about "no matches" while a filter is actually on -
         // an empty day already prints its own notice.
         var empty = s.querySelector('.sec-empty');
-        if (empty) empty.hidden = !(filtering && n === 0);
+        if (empty) {
+          empty.hidden = !(filtering && n === 0);
+          empty.textContent = emptyNote;
+        }
         var count = s.querySelector('.sec-count');
         if (count) count.textContent = n;
       });
@@ -1901,6 +2069,43 @@ __ARCHIVE_GROUPS__
         apply();
       });
     });
+
+    // Starring and binning, delegated so the handlers survive nothing - every
+    // entry on the page shares these two.
+    document.addEventListener('click', function (ev) {
+      var btn = ev.target.closest ? ev.target.closest('.act') : null;
+      if (!btn) return;
+
+      var entry = btn.closest('.entry');
+      var key = entry.dataset.key;
+      var bag = btn.dataset.act === 'fav' ? marks.fav : marks.bin;
+
+      if (bag[key]) {
+        delete bag[key];
+      } else {
+        bag[key] = 1;
+        // Binning a posting retires its star: it should not still be counted
+        // among the ones worth coming back to.
+        if (bag === marks.bin) delete marks.fav[key];
+      }
+
+      saveMarks();
+      apply();
+    });
+
+    function setView(next) {
+      view = view === next ? 'all' : next;
+      favBtn.setAttribute('aria-pressed', String(view === 'fav'));
+      binBtn.setAttribute('aria-pressed', String(view === 'bin'));
+      apply();
+    }
+
+    favBtn.addEventListener('click', function () { setView('fav'); });
+    binBtn.addEventListener('click', function () { setView('bin'); });
+
+    // Paints the stars and hides anything binned on a previous visit.
+    loadMarks();
+    apply();
 
     // The page is a plain static file behind a CDN that holds it for minutes,
     // so a normal reload can still hand back yesterday's edition. Reloading
