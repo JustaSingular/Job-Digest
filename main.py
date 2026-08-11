@@ -647,6 +647,390 @@ def scrape_evecaribbean():
         return []
 
 
+# --------------------------------------------- employer career sites
+#
+# The portals above carry hundreds of standing listings, so each one is cut
+# down to WINDOW_HOURS. Employer boards work the other way round: they show
+# only what is currently open - a couple of dozen roles at most - and most
+# publish no posting date at all. So these scrapers return every open role
+# and let the archive's link-based dedup decide what is new, which reports a
+# vacancy on the first run that sees it and never again. The exception is
+# NIDCO, which leaves expired adverts up for years and so is filtered on the
+# date carried in each advert's filename.
+#
+# Employers that block datacenter IPs (First Citizens, ANSA McAL, COLFIRE,
+# Guardian Media, SM Jaleel all answer 403) or that render postings only in
+# the browser (Sagicor, UTC, National Energy, Agostini, Massy) are absent on
+# purpose - see scrapability-audit.md.
+
+
+def scrape_bamboohr(subdomain, employer):
+    """Reads an employer's open roles from BambooHR's JSON listing.
+
+    Parameterised by subdomain because one function then covers every
+    employer on the platform - Maritime Financial and Hadco today, anyone
+    else who moves onto BambooHR later for the cost of one line."""
+    url = f"https://{subdomain}.bamboohr.com/careers/list"
+    try:
+        res = requests.get(url, headers=HEADERS, timeout=20)
+        if res.status_code != 200:
+            print(f"{employer}: BambooHR returned status {res.status_code}, skipping.")
+            return []
+
+        result = res.json().get("result", [])
+        listings = []
+
+        for job in result:
+            title = _one_line(job.get("jobOpeningName") or "")
+            job_id = job.get("id")
+            if not title or job_id is None:
+                continue
+
+            place = job.get("location") or {}
+            where = ", ".join(p for p in (place.get("city"), place.get("state")) if p)
+            details = " | ".join(p for p in (
+                f"Employer: {employer}",
+                f"Location: {where}" if where else "Location: Trinidad & Tobago",
+                job.get("departmentLabel") or "",
+                job.get("employmentStatusLabel") or "",
+            ) if p)
+
+            listings.append(
+                f"Source: {employer} | Listing: {title} | "
+                f"Details: {_one_line(details)} | "
+                f"URL: https://{subdomain}.bamboohr.com/careers/{job_id}"
+            )
+
+        print(f"{employer} (BambooHR): {len(result)} open roles, {len(listings)} usable.")
+        return listings[:40]
+    except (requests.RequestException, ValueError) as e:
+        print(f"Error scraping {employer} (BambooHR): {e}")
+        return []
+
+
+def scrape_oracle_recruiting(host, site_number, employer, country="TT"):
+    """Reads open requisitions from an Oracle Recruiting career site.
+
+    Guardian Group's site serves the whole region, so requisitions are cut to
+    one country: PrimaryLocationCountry is the field that tells a Port of
+    Spain role from a Curacao one (the human-readable PrimaryLocation is free
+    text and not reliable enough to match on)."""
+    api = (f"https://{host}/hcmRestApi/resources/latest/recruitingCEJobRequisitions"
+           f"?onlyData=true&expand=requisitionList"
+           f"&finder=findReqs;siteNumber={site_number},limit=200")
+    try:
+        res = requests.get(api, headers=HEADERS, timeout=25)
+        if res.status_code != 200:
+            print(f"{employer}: Oracle Recruiting returned status {res.status_code}, skipping.")
+            return []
+
+        items = res.json().get("items") or []
+        requisitions = items[0].get("requisitionList", []) if items else []
+
+        listings = []
+        for req in requisitions:
+            if country and req.get("PrimaryLocationCountry") != country:
+                continue
+
+            title = _one_line(req.get("Title") or "")
+            req_id = req.get("Id")
+            if not title or req_id is None:
+                continue
+
+            details = " | ".join(p for p in (
+                f"Employer: {employer}",
+                f"Location: {req.get('PrimaryLocation') or 'Trinidad & Tobago'}",
+                f"Posted: {req.get('PostedDate')}" if req.get("PostedDate") else "",
+            ) if p)
+
+            listings.append(
+                f"Source: {employer} | Listing: {title} | "
+                f"Details: {_one_line(details)} | "
+                f"URL: https://{host}/hcmUI/CandidateExperience/en/sites/"
+                f"{site_number}/job/{req_id}"
+            )
+
+        print(f"{employer} (Oracle): {len(requisitions)} requisitions, "
+              f"{len(listings)} in {country}.")
+        return listings[:40]
+    except (requests.RequestException, ValueError, IndexError, AttributeError) as e:
+        print(f"Error scraping {employer} (Oracle Recruiting): {e}")
+        return []
+
+
+DIGICEL_JOB = re.compile(r"/job/[^/]+/\d+")
+
+
+def scrape_digicel():
+    """Scrapes Digicel's Trinidad vacancies.
+
+    Digicel runs a SuccessFactors site, which usually means the postings are
+    drawn by JavaScript and invisible to a plain request. This one is the
+    exception - it renders results server-side, so the location filter can go
+    in the query string and the rows read straight out of the HTML. Every job
+    is linked twice per row, hence the dedup on href."""
+    url = "https://careers.digicelgroup.com/search/?q=&locationsearch=Trinidad"
+    try:
+        res = requests.get(url, headers=HEADERS, timeout=20)
+        if res.status_code != 200:
+            print(f"Digicel returned status {res.status_code}, skipping.")
+            return []
+
+        soup = BeautifulSoup(res.text, "html.parser")
+        seen, listings = set(), []
+
+        for a in soup.find_all("a", href=True):
+            href = a["href"]
+            if not DIGICEL_JOB.search(href) or href in seen:
+                continue
+
+            title = _one_line(a.get_text(" ", strip=True))
+            if not title:
+                continue
+            seen.add(href)
+
+            # The row carries the location in its own cell. Reading it from the
+            # row's full text instead would sweep up the repeated job title,
+            # since each row prints the title once for desktop and once for phone.
+            row = a.find_parent("tr")
+            cell = row.find("span", class_="jobLocation") if row else None
+            place = _one_line(cell.get_text(" ", strip=True)) if cell else ""
+            full_link = href if href.startswith("http") else "https://careers.digicelgroup.com" + href
+
+            listings.append(
+                f"Source: Digicel | Listing: {title} | "
+                f"Details: Employer: Digicel | "
+                f"Location: {place or 'Trinidad & Tobago'} | "
+                f"URL: {full_link}"
+            )
+
+        if not listings:
+            print("Digicel: 0 job links found - page structure may have changed.")
+        else:
+            print(f"Digicel: {len(listings)} Trinidad roles found.")
+        return listings[:40]
+    except requests.RequestException as e:
+        print(f"Error scraping Digicel: {e}")
+        return []
+
+
+# Filenames lead with the advert's date, in either 2025-12-03 or 2024-08_12 form.
+NIDCO_STAMP = re.compile(r"(20\d\d)[-_](\d{2})[-_](\d{2})")
+NIDCO_MAX_AGE_DAYS = 180
+
+
+def scrape_nidco():
+    """Scrapes NIDCO's vacancy adverts.
+
+    Each vacancy is a PDF whose link text is the job title. Expired adverts
+    are never taken down - the page still carries ads from 2022 - so the date
+    in the filename decides what is still live. Adverts with no date in the
+    filename are all pre-2023 and are dropped with them."""
+    url = "https://www.nidco.co.tt/careers/"
+    try:
+        res = requests.get(url, headers=HEADERS, timeout=20)
+        if res.status_code != 200:
+            print(f"NIDCO returned status {res.status_code}, skipping.")
+            return []
+
+        soup = BeautifulSoup(res.text, "html.parser")
+        cutoff = datetime.now() - timedelta(days=NIDCO_MAX_AGE_DAYS)
+        adverts, listings = 0, []
+
+        for a in soup.find_all("a", href=True):
+            href = a["href"]
+            if not href.lower().endswith(".pdf"):
+                continue
+
+            title = _one_line(a.get_text(" ", strip=True))
+            if not title:
+                continue
+            adverts += 1
+
+            stamp = NIDCO_STAMP.search(href.rsplit("/", 1)[-1])
+            if not stamp:
+                continue
+            try:
+                posted = datetime(int(stamp.group(1)), int(stamp.group(2)),
+                                  int(stamp.group(3)))
+            except ValueError:
+                continue
+            if posted < cutoff:
+                continue
+
+            full_link = href if href.startswith("http") else "https://www.nidco.co.tt" + href
+            listings.append(
+                f"Source: NIDCO | Listing: {title} | "
+                f"Details: Employer: NIDCO | Location: Trinidad & Tobago | "
+                f"Posted: {posted.date().isoformat()} | URL: {full_link}"
+            )
+
+        print(f"NIDCO: {adverts} adverts on file, {len(listings)} posted in the "
+              f"last {NIDCO_MAX_AGE_DAYS} days.")
+        return listings[:40]
+    except requests.RequestException as e:
+        print(f"Error scraping NIDCO: {e}")
+        return []
+
+
+PATT_SECTION_HEADING = re.compile(r"^(vacanc|career|opportunit|job)", re.I)
+ROLE_WORD = re.compile(
+    r"\b(manager|officer|analyst|engineer|technician|supervisor|clerk|assistant|"
+    r"accountant|developer|administrator|coordinator|specialist|attendant|driver|"
+    r"cashier|teller|operator|representative|executive|director|intern|trainee|"
+    r"graduate|apprentice|consultant|auditor|architect|designer|planner|secretary|"
+    r"receptionist|foreman|welder|electrician|agent|programmer|chemist|nurse|"
+    r"surveyor|inspector|associate|advisor|adviser|attorney|counsel|buyer|"
+    r"controller|economist|mechanic|fitter|steward|seaman|rating)\b", re.I)
+
+
+def scrape_patt():
+    """Scrapes the Port Authority's vacancy page.
+
+    Vacancies here are headings, not links, so there is no per-job URL. Each
+    job is given the page URL plus a slug fragment: without a distinct link
+    the archive's link-based key would fold every Port Authority vacancy into
+    a single entry, and only the first would ever be reported.
+
+    Certificate verification is off for this host alone. patnt.com serves an
+    incomplete chain - it omits the intermediate, which browsers fetch on
+    their own and requests does not - so verification fails against an
+    otherwise valid certificate. The page is public job adverts and nothing
+    is sent to the server, so the exposure is limited to reading a tampered
+    vacancy list; the alternative is dropping the source entirely."""
+    url = "https://www.patnt.com/about/vacancies/"
+    try:
+        res = requests.get(url, headers=HEADERS, timeout=20, verify=False)
+        if res.status_code != 200:
+            print(f"Port Authority returned status {res.status_code}, skipping.")
+            return []
+
+        soup = BeautifulSoup(res.text, "html.parser")
+        body = soup.find("main") or soup
+        listings, seen = [], set()
+
+        for heading in body.find_all(["h2", "h3", "h4"]):
+            title = _one_line(heading.get_text(" ", strip=True))
+            title = re.sub(r"^vacanc(?:y|ies)\s*:\s*", "", title, flags=re.I)
+
+            # "Vacancies" itself is the section header, not a job.
+            if not title or len(title) > 120 or PATT_SECTION_HEADING.match(title):
+                continue
+            if not ROLE_WORD.search(title):
+                continue
+
+            slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")
+            if slug in seen:
+                continue
+            seen.add(slug)
+
+            listings.append(
+                f"Source: Port Authority | Listing: {title} | "
+                f"Details: Employer: Port Authority of Trinidad and Tobago | "
+                f"Location: Trinidad & Tobago | URL: {url}#{slug}"
+            )
+
+        print(f"Port Authority: {len(listings)} vacancies found.")
+        return listings[:40]
+    except requests.RequestException as e:
+        print(f"Error scraping Port Authority: {e}")
+        return []
+
+
+NP_FILENAME_PREFIX = re.compile(r"^(NP|LFCTT)[-_]?Employment[-_]?(Opp|Opportunity)[a-z]*[-_]?", re.I)
+NP_FILENAME_SUFFIX = re.compile(r"[-_](new[-_]?date|final|revised|edited)([-_]?\d+)?$", re.I)
+
+
+def scrape_np():
+    """Scrapes National Petroleum's vacancy adverts.
+
+    Every advert is a PDF whose link text is just "Download", so the title has
+    to be recovered from the filename - NP-Employment-Opp-ICT-Manager-new-date
+    yields "ICT Manager". The results are rougher than the other sources and a
+    few come through as the employer's own shorthand."""
+    url = "https://www.np.co.tt/careers/"
+    try:
+        res = requests.get(url, headers=HEADERS, timeout=20)
+        if res.status_code != 200:
+            print(f"National Petroleum returned status {res.status_code}, skipping.")
+            return []
+
+        soup = BeautifulSoup(res.text, "html.parser")
+        seen, listings = set(), []
+
+        for a in soup.find_all("a", href=True):
+            href = a["href"]
+            if not href.lower().endswith(".pdf") or href in seen:
+                continue
+            seen.add(href)
+
+            stem = href.rsplit("/", 1)[-1].rsplit(".", 1)[0]
+            stem = NP_FILENAME_PREFIX.sub("", stem)
+            stem = NP_FILENAME_SUFFIX.sub("", stem)
+            stem = re.sub(r"[-_.]+", " ", stem)
+            title = _one_line(re.sub(r"\s+\d+$", "", stem))
+            if not title or len(title) < 3:
+                continue
+
+            full_link = href if href.startswith("http") else "https://www.np.co.tt" + href
+            listings.append(
+                f"Source: National Petroleum | Listing: {title} | "
+                f"Details: Employer: National Petroleum (NP) | "
+                f"Location: Trinidad & Tobago | URL: {full_link}"
+            )
+
+        print(f"National Petroleum: {len(listings)} vacancy adverts found.")
+        return listings[:40]
+    except requests.RequestException as e:
+        print(f"Error scraping National Petroleum: {e}")
+        return []
+
+
+def scrape_us_embassy():
+    """Scrapes vacancies at the US Embassy in Port of Spain.
+
+    tt.usembassy.gov publishes nothing machine-readable; the mission's actual
+    vacancies sit on the State Department's ERA board under the Trinidad and
+    Tobago country path, which is server-rendered and already scoped to the
+    country, so no location filtering is needed here."""
+    url = "https://erajobs.state.gov/dos-era/tto/vacancysearch/searchVacancies.hms"
+    try:
+        res = requests.get(url, headers=HEADERS, timeout=20)
+        if res.status_code != 200:
+            print(f"US Embassy (ERA) returned status {res.status_code}, skipping.")
+            return []
+
+        soup = BeautifulSoup(res.text, "html.parser")
+        seen, listings = set(), []
+
+        for a in soup.find_all("a", href=True):
+            href = a["href"]
+            if "viewvacancydetail" not in href.lower() or href in seen:
+                continue
+
+            title = _one_line(a.get_text(" ", strip=True))
+            if not title:
+                continue
+            seen.add(href)
+
+            row = a.find_parent("tr")
+            details = _one_line(row.get_text(" | ", strip=True))[:250] if row else ""
+            full_link = href if href.startswith("http") else "https://erajobs.state.gov" + href
+
+            listings.append(
+                f"Source: US Embassy | Listing: {title} | "
+                f"Details: Employer: U.S. Embassy Port of Spain | "
+                f"Location: Port of Spain, Trinidad & Tobago | {details} | "
+                f"URL: {full_link}"
+            )
+
+        print(f"US Embassy: {len(listings)} vacancies found.")
+        return listings[:40]
+    except requests.RequestException as e:
+        print(f"Error scraping US Embassy: {e}")
+        return []
+
+
 def summarize_and_filter(raw_data_string, max_retries=3):
     """Uses Gemini to dedup listings and split them into IT vs. other,
     returned as structured JSON (not markdown) so the HTML page can render
@@ -655,14 +1039,28 @@ def summarize_and_filter(raw_data_string, max_retries=3):
 
     prompt = f"""
     You are an automated career assistant. Below is raw scraped job data,
-    already filtered to Trinidad & Tobago listings posted in the last 24
-    hours from these portals:
+    all of it Trinidad & Tobago listings.
+
+    From these job portals, already filtered to the last 24 hours:
     1. IslandJobHunt.com
     2. CaribbeanJobs.com
     3. JobsTT.com
     4. Pin.tt
     5. EmployTT (employtt.gov.tt)
     6. Eve Caribbean (evecaribbean.com)
+
+    And from these employers' own career sites, which list whatever is
+    currently open rather than what was posted today, so they carry no date
+    filter (a later step drops any that were reported on an earlier run):
+    7. Guardian Group
+    8. Atlantic LNG
+    9. Maritime Financial
+    10. Hadco
+    11. Digicel
+    12. NIDCO
+    13. Port Authority
+    14. National Petroleum
+    15. US Embassy
 
     YOUR TASK:
     1. Remove duplicate listings (same title + company appearing more than
@@ -689,8 +1087,11 @@ def summarize_and_filter(raw_data_string, max_retries=3):
 
     Use "" for company/location if genuinely not present in the raw text.
     For "source", copy the value after "Source:" on that listing's raw line
-    verbatim (IslandJobHunt, CaribbeanJobs, JobsTT, Pin.tt, EmployTT or
-    EveCaribbean) - do not invent or reword it.
+    verbatim (IslandJobHunt, CaribbeanJobs, JobsTT, Pin.tt, EmployTT,
+    EveCaribbean, Guardian Group, Atlantic LNG, Maritime Financial, Hadco,
+    Digicel, NIDCO, Port Authority, National Petroleum or US Embassy) - do
+    not invent or reword it. Listings from an employer's own career site name
+    that employer after "Employer:" in their details - use it as "company".
 
     RAW SCRAPED DATA:
     {raw_data_string}
@@ -1121,6 +1522,18 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     border-color: var(--ink);
   }
 
+  .refresh {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--ink);
+  }
+  .refresh svg { display: block; }
+  .refresh[disabled] { cursor: progress; color: var(--ink-soft); }
+  .refresh[disabled] svg { animation: spin .9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
   /* ---------------------------------------------------------- sections */
 
   section { padding-top: 40px; }
@@ -1372,8 +1785,9 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     <div class="lede">
       <p>Every vacancy this bulletin has ever seen is kept below &mdash; today's
       catch is set at the top, and each earlier day is bundled into the archive
-      beneath it. Nothing is thrown out. Scraped at dawn from IslandJobHunt and
-      CaribbeanJobs, sorted by machine, printed without comment.</p>
+      beneath it. Nothing is thrown out. Scraped twice daily from six local job
+      portals and the career sites of nine T&amp;T employers, sorted by machine,
+      printed without comment.</p>
       <div class="tally">
         <div><span class="n hot">__NEW_COUNT__</span><span class="l">New today</span></div>
         <div><span class="n">__TECH_TOTAL__</span><span class="l">Tech on file</span></div>
@@ -1394,6 +1808,14 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
         <button class="chip" data-cat="it" aria-pressed="false">Tech</button>
         <button class="chip" data-cat="other" aria-pressed="false">Everything else</button>
       </div>
+      <button id="refresh" class="chip refresh" type="button"
+              title="Fetch the latest edition, bypassing your browser's cache">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M10.4 6a4.4 4.4 0 1 1-1.3-3.1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M10.6 1v2.4H8.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="refresh-label">Refresh</span>
+      </button>
     </div>
 
     <section data-section id="today">
@@ -1479,6 +1901,24 @@ __ARCHIVE_GROUPS__
         apply();
       });
     });
+
+    // The page is a plain static file behind a CDN that holds it for minutes,
+    // so a normal reload can still hand back yesterday's edition. Reloading
+    // with a fresh query string misses both the browser and the edge cache.
+    var refresh = document.getElementById('refresh');
+    var label = refresh.querySelector('.refresh-label');
+
+    refresh.addEventListener('click', function () {
+      refresh.disabled = true;
+      label.textContent = 'Refreshing';
+      location.replace(location.pathname + '?v=' + new Date().getTime() + location.hash);
+    });
+
+    // Having done its job, the cache-buster is scrubbed from the address bar
+    // so the URL people copy or bookmark stays clean.
+    if (location.search.indexOf('v=') !== -1 && window.history && history.replaceState) {
+      history.replaceState(null, '', location.pathname + location.hash);
+    }
   })();
 </script>
 </body>
@@ -1556,6 +1996,20 @@ def main():
         ("Pin.tt", scrape_pintt),
         ("EmployTT", scrape_employtt),
         ("EveCaribbean", scrape_evecaribbean),
+        # Employer career sites. Unlike the portals above these are not
+        # date-filtered - see the comment block above scrape_bamboohr.
+        ("Guardian Group", lambda: scrape_oracle_recruiting(
+            "fa-eqnr-saasfaprod1.fa.ocs.oraclecloud.com", "CX_1020", "Guardian Group")),
+        ("Atlantic LNG", lambda: scrape_oracle_recruiting(
+            "emkf.fa.us2.oraclecloud.com", "CX_1001", "Atlantic LNG")),
+        ("Maritime Financial", lambda: scrape_bamboohr(
+            "maritimefinancial", "Maritime Financial")),
+        ("Hadco", lambda: scrape_bamboohr("hadcogroup", "Hadco")),
+        ("Digicel", scrape_digicel),
+        ("NIDCO", scrape_nidco),
+        ("Port Authority", scrape_patt),
+        ("National Petroleum", scrape_np),
+        ("US Embassy", scrape_us_embassy),
     ]
 
     all_listings = []
