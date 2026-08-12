@@ -43,3 +43,19 @@ jobs:
           # rather than clobbering it with a force push.
           git pull --rebase --autostash
           git push
+
+      # Netlify normally redeploys off its own GitHub webhook. This is the
+      # backstop for when that webhook is missing or has gone quiet: a build
+      # hook URL published as the NETLIFY_BUILD_HOOK secret forces the deploy
+      # from this side. Skipped silently when the secret isn't set.
+      - name: Trigger Netlify deploy
+        env:
+          # Read through env rather than inline: the secrets context isn't
+          # available to a step-level `if`.
+          HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "No NETLIFY_BUILD_HOOK set - leaving the deploy to Netlify's own webhook."
+            exit 0
+          fi
+          curl -fsS -X POST -d '{}' "$HOOK"

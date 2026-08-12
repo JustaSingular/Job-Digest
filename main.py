@@ -1572,6 +1572,51 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   .refresh[disabled] svg { animation: spin .9s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* Raised by the poller below when a later edition lands on the server
+     while this tab is sitting open. */
+  .stop-press {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translate(-50%, 140%);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 16px;
+    background: var(--ink);
+    color: var(--paper);
+    border: 1px solid var(--ink);
+    box-shadow: 0 6px 22px rgba(23, 20, 15, .35);
+    font-family: 'Courier Prime', monospace;
+    font-size: 12px;
+    letter-spacing: .04em;
+    transition: transform .35s ease;
+  }
+  .stop-press[hidden] { display: none; }
+  .stop-press.up { transform: translate(-50%, 0); }
+  .stop-press b { letter-spacing: .12em; text-transform: uppercase; }
+  .stop-press button {
+    font: inherit;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    cursor: pointer;
+    background: var(--gold);
+    color: var(--paper);
+    border: 0;
+  }
+  .stop-press .dismiss {
+    background: none;
+    color: var(--paper);
+    opacity: .6;
+    padding: 5px 2px;
+  }
+  @media (max-width: 520px) {
+    .stop-press { left: 12px; right: 12px; bottom: 12px; transform: translateY(140%); }
+    .stop-press.up { transform: translateY(0); }
+  }
+
   /* ---------------------------------------------------------- sections */
 
   section { padding-top: 40px; }
@@ -1950,6 +1995,12 @@ __ARCHIVE_GROUPS__
 
   </div>
 
+  <div class="stop-press" id="stop-press" role="status" hidden>
+    <span><b>Stop press</b> &mdash; a later edition has been filed.</span>
+    <button type="button" class="read">Read it</button>
+    <button type="button" class="dismiss" aria-label="Dismiss">&times;</button>
+  </div>
+
 <script>
   (function () {
     var q = document.getElementById('q');
@@ -2113,16 +2164,74 @@ __ARCHIVE_GROUPS__
     var refresh = document.getElementById('refresh');
     var label = refresh.querySelector('.refresh-label');
 
+    function hardReload() {
+      location.replace(location.pathname + '?v=' + new Date().getTime() + location.hash);
+    }
+
     refresh.addEventListener('click', function () {
       refresh.disabled = true;
       label.textContent = 'Refreshing';
-      location.replace(location.pathname + '?v=' + new Date().getTime() + location.hash);
+      hardReload();
     });
 
     // Having done its job, the cache-buster is scrubbed from the address bar
     // so the URL people copy or bookmark stays clean.
     if (location.search.indexOf('v=') !== -1 && window.history && history.replaceState) {
       history.replaceState(null, '', location.pathname + location.hash);
+    }
+
+    // ------------------------------------------------ watching for a new edition
+    // This page is a static file, so a tab left open overnight keeps showing
+    // whichever edition it was served. The archive it was built from is stamped
+    // below; jobs.json carries the same stamp and is rewritten by every run that
+    // finds something, so a stamp newer than this one means a fresh edition is
+    // already sitting on the server.
+    var BUILT_FROM = '__UPDATED__';
+    var POLL_MS = 4 * 60 * 1000;
+    var press = document.getElementById('stop-press');
+    var pressed = false;
+
+    function newerEditionExists(stamp) {
+      return typeof stamp === 'string' && stamp > BUILT_FROM;
+    }
+
+    function announce() {
+      if (pressed) return;
+      pressed = true;
+      // Nobody is reading a backgrounded tab, so it can just swap itself out
+      // and be current by the time it is looked at again.
+      if (document.hidden) { hardReload(); return; }
+      press.hidden = false;
+      // Painted hidden first so the slide-up transition actually runs.
+      requestAnimationFrame(function () { press.classList.add('up'); });
+    }
+
+    function poll() {
+      if (pressed || !window.fetch) return;
+      // Both caches have to be stepped around: the query string defeats the
+      // CDN, no-store defeats the browser.
+      fetch('jobs.json?t=' + new Date().getTime(), { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          if (data && newerEditionExists(data.updated)) announce();
+        })
+        .catch(function () { /* offline or mid-deploy; the next tick retries */ });
+    }
+
+    if (press) {
+      press.querySelector('.read').addEventListener('click', hardReload);
+      press.querySelector('.dismiss').addEventListener('click', function () {
+        press.classList.remove('up');
+        setTimeout(function () { press.hidden = true; }, 350);
+      });
+
+      setInterval(poll, POLL_MS);
+      // Timers are throttled hard in background tabs, so coming back to one is
+      // the moment most likely to be showing something stale.
+      document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) poll();
+      });
+      poll();
     }
   })();
 </script>
@@ -2154,7 +2263,12 @@ def generate_html(new_jobs, archive, run_dt, output_path="docs/index.html"):
             .replace("__TOTAL__", str(len(archive)))
             .replace("__ISSUE__", str(issue_no))
             .replace("__DATELINE__", dateline)
-            .replace("__TIME__", run_dt.strftime("%H:%M UTC")))
+            .replace("__TIME__", run_dt.strftime("%H:%M UTC"))
+            # Stamped a moment after save_archive() wrote jobs.json, so this is
+            # always >= the stamp in the file this page was built from. The
+            # in-page poller compares the two and only speaks up when a *later*
+            # run has rewritten jobs.json.
+            .replace("__UPDATED__", run_dt.strftime("%Y-%m-%dT%H:%M:%SZ")))
 
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:

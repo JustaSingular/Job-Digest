@@ -1,0 +1,27 @@
+# The digest is a pre-rendered static file - GitHub Actions regenerates
+# docs/index.html twice a day and commits it, and Netlify just serves it.
+# There is nothing to build here.
+[build]
+  publish = "docs"
+  command = "echo 'Static site - nothing to build.'"
+
+# Netlify purges its edge on every deploy, but the *browser* is free to keep
+# serving what it already has. These two files are the whole site and they
+# change under a fixed URL, so both caches have to revalidate every time
+# rather than trust an age.
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Polled from the open page to spot a newer edition, so a stale copy here
+# means the "stop press" prompt never fires.
+[[headers]]
+  for = "/jobs.json"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
