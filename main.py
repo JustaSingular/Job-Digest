@@ -14,8 +14,8 @@ load_dotenv()
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
-NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "Brand_New_Jobs_Digest")
-NTFY_URL = f"https://ntfy.sh/{NTFY_TOPIC}"
+PUSH_URL = os.environ.get("PUSH_URL") or "https://pushnotifapp.netlify.app/api/publish"
+PUSH_TOKEN = os.environ.get("PUSH_TOKEN") or "w7CUAMuJyihXM5_lsPChcQViQVh25KDn"
 
 ARCHIVE_PATH = "docs/jobs.json"
 
@@ -31,31 +31,31 @@ HEADERS = {
 
 def site_url():
     """Public GitHub Pages URL, derived from the Actions environment when
-    available so the ntfy notification can be tapped to open the digest."""
-    repo = os.environ.get("GITHUB_REPOSITORY")
-    if not repo or "/" not in repo:
+    available so the notification carries a link to the digest. Falls back to
+    this repo's own Pages URL for local runs, where GITHUB_REPOSITORY is unset."""
+    repo = os.environ.get("GITHUB_REPOSITORY") or "JustaSingular/Job-Digest"
+    if "/" not in repo:
         return ""
     owner, name = repo.split("/", 1)
     return f"https://{owner.lower()}.github.io/{name}/"
 
 
-def notify(message, title="T&T Job Digest", tags="briefcase"):
-    """Pushes a run summary to the ntfy topic. Never raises - a failed
+def notify(message, title="T&T Job Digest"):
+    """Pushes a run summary to the push service. Never raises - a failed
     notification must not fail the digest run."""
-    headers = {"Title": title, "Tags": tags}
-    click = site_url()
-    if click:
-        headers["Click"] = click
+    link = site_url()
+    if link:
+        message = f"{message}\n\n{link}"
     try:
         requests.post(
-            NTFY_URL,
-            data=message.encode("utf-8"),
-            headers=headers,
+            PUSH_URL,
+            headers={"Authorization": f"Bearer {PUSH_TOKEN}"},
+            json={"title": title, "message": message},
             timeout=15,
         )
-        print(f"ntfy: sent notification to {NTFY_TOPIC}")
+        print("push: sent notification")
     except requests.RequestException as e:
-        print(f"ntfy: failed to send notification: {e}")
+        print(f"push: failed to send notification: {e}")
 
 
 def _one_line(text):
@@ -2349,8 +2349,7 @@ def main():
         # Still refresh the page so the archive stays reachable and dated.
         generate_html([], archive, run_dt)
         notify(f"Scrape came back empty - no listings fetched this run.\n"
-               f"{len(archive)} postings still on file.",
-               tags="warning")
+               f"{len(archive)} postings still on file.")
         return
 
     print(f"Found {len(all_listings)} listings within the last 24 hours.")
@@ -2367,8 +2366,7 @@ def main():
     save_archive(archive)
     generate_html(new_jobs, archive, run_dt)
     notify(_notification_text(new_jobs, archive),
-           title=f"T&T Job Digest - {len(new_jobs)} new",
-           tags="briefcase" if new_jobs else "zzz")
+           title=f"T&T Job Digest - {len(new_jobs)} new")
 
 
 if __name__ == "__main__":
