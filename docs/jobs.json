@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-12T10:55:13Z",
-  "count": 125,
+  "updated": "2026-08-12T23:40:10Z",
+  "count": 135,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -1126,6 +1126,96 @@
       "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=lzbpznrnpt0&returnToSearch=true&jnum=75871&orgId=175",
       "category": "other",
       "first_seen": "2026-08-12T10:54:11Z"
+    },
+    {
+      "title": "Solutions Architect",
+      "company": "Beijing Foreign Enterprise Management Consultants Co.,Ltd.",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/602674575-solutions-architect",
+      "category": "it",
+      "first_seen": "2026-08-12T23:38:18Z"
+    },
+    {
+      "title": "Design & Client Liaison Coordinator",
+      "company": "GAL Development Group",
+      "location": "Diego Martin, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/602674577-design-client-liaison-coordinator",
+      "category": "other",
+      "first_seen": "2026-08-12T23:38:18Z"
+    },
+    {
+      "title": "Accounting Assistant",
+      "company": "GESSCO Group",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/602674574-accounting-assistant",
+      "category": "other",
+      "first_seen": "2026-08-12T23:38:18Z"
+    },
+    {
+      "title": "Operator",
+      "company": "SLB",
+      "location": "San Fernando, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/602674573-operator",
+      "category": "other",
+      "first_seen": "2026-08-12T23:38:18Z"
+    },
+    {
+      "title": "Distribution Sales Manager",
+      "company": "Beijing Foreign Enterprise Management Consultants Co.,Ltd.",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/602674572-distribution-sales-manager",
+      "category": "other",
+      "first_seen": "2026-08-12T23:38:18Z"
+    },
+    {
+      "title": "Construction Engineer - E&I",
+      "company": "Massy Wood Group Ltd.",
+      "location": "Point Fortin, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/602674571-construction-engineer-e-i",
+      "category": "other",
+      "first_seen": "2026-08-12T23:38:18Z"
+    },
+    {
+      "title": "Cashier Supervisor",
+      "company": "",
+      "location": "Arima/Sangre Grande",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Cashier-Supervisor-Job-236679.aspx",
+      "category": "other",
+      "first_seen": "2026-08-12T23:38:18Z"
+    },
+    {
+      "title": "Heavy T Driver",
+      "company": "",
+      "location": "Chaguanas, Trinidad",
+      "source": "EveCaribbean",
+      "link": "https://evecaribbean.com/tt/job/heavy-t-driver/",
+      "category": "other",
+      "first_seen": "2026-08-12T23:38:18Z"
+    },
+    {
+      "title": "Customer Service Representative",
+      "company": "",
+      "location": "Chaguanas, Trinidad",
+      "source": "EveCaribbean",
+      "link": "https://evecaribbean.com/tt/job/customer-service-representative/",
+      "category": "other",
+      "first_seen": "2026-08-12T23:38:18Z"
+    },
+    {
+      "title": "Lead Voucher Examiner/Alternate Class B Cashier",
+      "company": "U.S. Embassy Port of Spain",
+      "location": "Port of Spain, Trinidad & Tobago",
+      "source": "US Embassy",
+      "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=aut4s3vnpt0&returnToSearch=true&jnum=75871&orgId=175",
+      "category": "other",
+      "first_seen": "2026-08-12T23:38:18Z"
     }
   ]
 }
