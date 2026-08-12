@@ -253,6 +253,51 @@
   .refresh[disabled] svg { animation: spin .9s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* Raised by the poller below when a later edition lands on the server
+     while this tab is sitting open. */
+  .stop-press {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translate(-50%, 140%);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 16px;
+    background: var(--ink);
+    color: var(--paper);
+    border: 1px solid var(--ink);
+    box-shadow: 0 6px 22px rgba(23, 20, 15, .35);
+    font-family: 'Courier Prime', monospace;
+    font-size: 12px;
+    letter-spacing: .04em;
+    transition: transform .35s ease;
+  }
+  .stop-press[hidden] { display: none; }
+  .stop-press.up { transform: translate(-50%, 0); }
+  .stop-press b { letter-spacing: .12em; text-transform: uppercase; }
+  .stop-press button {
+    font: inherit;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    cursor: pointer;
+    background: var(--gold);
+    color: var(--paper);
+    border: 0;
+  }
+  .stop-press .dismiss {
+    background: none;
+    color: var(--paper);
+    opacity: .6;
+    padding: 5px 2px;
+  }
+  @media (max-width: 520px) {
+    .stop-press { left: 12px; right: 12px; bottom: 12px; transform: translateY(140%); }
+    .stop-press.up { transform: translateY(0); }
+  }
+
   /* ---------------------------------------------------------- sections */
 
   section { padding-top: 40px; }
@@ -548,8 +593,8 @@
 
       <div class="dateline">
         <span>Wednesday, 12 August 2026</span>
-        <span>Filed <b>02:32 UTC</b></span>
-        <span>121 postings on file</span>
+        <span>Filed <b>10:54 UTC</b></span>
+        <span>125 postings on file</span>
       </div>
       <div class="thickline"></div>
       <div class="hairline" style="margin-top:3px"></div>
@@ -562,9 +607,9 @@
       portals and the career sites of nine T&amp;T employers, sorted by machine,
       printed without comment.</p>
       <div class="tally">
-        <div><span class="n hot">1</span><span class="l">New today</span></div>
+        <div><span class="n hot">4</span><span class="l">New today</span></div>
         <div><span class="n">6</span><span class="l">Tech on file</span></div>
-        <div><span class="n">121</span><span class="l">All on file</span></div>
+        <div><span class="n">125</span><span class="l">All on file</span></div>
       </div>
     </div>
 
@@ -603,18 +648,117 @@
       <div class="sec-head">
         <h2>Posted Today</h2>
         <span class="fill"></span>
-        <span class="n"><span class="sec-count">1</span> listed</span>
+        <span class="n"><span class="sec-count">4</span> listed</span>
       </div>
       <p class="sec-sub">Fresh to the archive as of this morning's run.</p>
       <div class="entries" id="fresh">
         <div class="entry"
-             data-cat="other" data-q="lead voucher examiner/alternate class b cashier u.s. embassy port of spain port of spain, trinidad &amp;amp; tobago us embassy" data-key="https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=auj0azvbpt0&amp;returnToSearch=true&amp;jnum=75871&amp;orgId=175">
-          <a class="entry-link" href="https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=auj0azvbpt0&amp;returnToSearch=true&amp;jnum=75871&amp;orgId=175" target="_blank" rel="noopener">
+             data-cat="other" data-q="associate ii - payroll ark outsourcing limited chaguanas jobstt" data-key="https://jobstt.com/job/associate-ii-payroll-1">
+          <a class="entry-link" href="https://jobstt.com/job/associate-ii-payroll-1" target="_blank" rel="noopener">
+            <span class="entry-body">
+              <span class="entry-title">Associate II - Payroll</span>
+              <span class="entry-meta"><em>ARK Outsourcing Limited</em> &middot; Chaguanas</span>
+            </span>
+            <span class="entry-side"><span class="entry-src">JobsTT</span></span>
+            <span class="entry-go">Read&nbsp;&rarr;</span>
+          </a>
+          <span class="entry-acts">
+            <button class="act act-fav" type="button" data-act="fav" aria-pressed="false"
+                    aria-label="Save to favourites" title="Save to favourites">
+              <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M8 1.6l1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"
+                      fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="act act-bin" type="button" data-act="bin"
+                    aria-label="Move to trash" title="Move to trash">
+              <svg class="i-bin" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2.8 4.3h10.4M6.2 4.3V2.9h3.6v1.4M4.2 4.3l.6 8.4h6.4l.6-8.4M6.6 6.6v4M9.4 6.6v4"
+                      fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+              <svg class="i-undo" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M3 8a5 5 0 1 1 1.5 3.6" fill="none" stroke="currentColor"
+                      stroke-width="1.4" stroke-linecap="round"/>
+                <path d="M2.6 4.6V8h3.4" fill="none" stroke="currentColor"
+                      stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </span>
+        </div>
+        <div class="entry"
+             data-cat="other" data-q="corporate sales representative – service sales rn syzygy employment relations ltd central jobstt" data-key="https://jobstt.com/job/corporate-sales-representative-service-sales">
+          <a class="entry-link" href="https://jobstt.com/job/corporate-sales-representative-service-sales" target="_blank" rel="noopener">
+            <span class="entry-body">
+              <span class="entry-title">Corporate Sales Representative – Service Sales</span>
+              <span class="entry-meta"><em>RN Syzygy Employment Relations Ltd</em> &middot; Central</span>
+            </span>
+            <span class="entry-side"><span class="entry-src">JobsTT</span></span>
+            <span class="entry-go">Read&nbsp;&rarr;</span>
+          </a>
+          <span class="entry-acts">
+            <button class="act act-fav" type="button" data-act="fav" aria-pressed="false"
+                    aria-label="Save to favourites" title="Save to favourites">
+              <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M8 1.6l1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"
+                      fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="act act-bin" type="button" data-act="bin"
+                    aria-label="Move to trash" title="Move to trash">
+              <svg class="i-bin" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2.8 4.3h10.4M6.2 4.3V2.9h3.6v1.4M4.2 4.3l.6 8.4h6.4l.6-8.4M6.6 6.6v4M9.4 6.6v4"
+                      fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+              <svg class="i-undo" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M3 8a5 5 0 1 1 1.5 3.6" fill="none" stroke="currentColor"
+                      stroke-width="1.4" stroke-linecap="round"/>
+                <path d="M2.6 4.6V8h3.4" fill="none" stroke="currentColor"
+                      stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </span>
+        </div>
+        <div class="entry"
+             data-cat="other" data-q="lead voucher examiner/alternate class b cashier u.s. embassy port of spain port of spain, trinidad &amp;amp; tobago us embassy" data-key="https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=lzbpznrnpt0&amp;returnToSearch=true&amp;jnum=75871&amp;orgId=175">
+          <a class="entry-link" href="https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=lzbpznrnpt0&amp;returnToSearch=true&amp;jnum=75871&amp;orgId=175" target="_blank" rel="noopener">
             <span class="entry-body">
               <span class="entry-title">Lead Voucher Examiner/Alternate Class B Cashier</span>
               <span class="entry-meta"><em>U.S. Embassy Port of Spain</em> &middot; Port of Spain, Trinidad &amp; Tobago</span>
             </span>
             <span class="entry-side"><span class="entry-src">US Embassy</span></span>
+            <span class="entry-go">Read&nbsp;&rarr;</span>
+          </a>
+          <span class="entry-acts">
+            <button class="act act-fav" type="button" data-act="fav" aria-pressed="false"
+                    aria-label="Save to favourites" title="Save to favourites">
+              <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M8 1.6l1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"
+                      fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="act act-bin" type="button" data-act="bin"
+                    aria-label="Move to trash" title="Move to trash">
+              <svg class="i-bin" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2.8 4.3h10.4M6.2 4.3V2.9h3.6v1.4M4.2 4.3l.6 8.4h6.4l.6-8.4M6.6 6.6v4M9.4 6.6v4"
+                      fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+              <svg class="i-undo" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M3 8a5 5 0 1 1 1.5 3.6" fill="none" stroke="currentColor"
+                      stroke-width="1.4" stroke-linecap="round"/>
+                <path d="M2.6 4.6V8h3.4" fill="none" stroke="currentColor"
+                      stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </span>
+        </div>
+        <div class="entry"
+             data-cat="other" data-q="operations manager rn syzygy employment relations ltd central jobstt" data-key="https://jobstt.com/job/operations-manager-3">
+          <a class="entry-link" href="https://jobstt.com/job/operations-manager-3" target="_blank" rel="noopener">
+            <span class="entry-body">
+              <span class="entry-title">Operations Manager</span>
+              <span class="entry-meta"><em>RN Syzygy Employment Relations Ltd</em> &middot; Central</span>
+            </span>
+            <span class="entry-side"><span class="entry-src">JobsTT</span></span>
             <span class="entry-go">Read&nbsp;&rarr;</span>
           </a>
           <span class="entry-acts">
@@ -648,19 +792,52 @@
       <div class="sec-head">
         <h2>Back Issues</h2>
         <span class="fill"></span>
-        <span class="n"><span class="sec-count">120</span> kept</span>
+        <span class="n"><span class="sec-count">121</span> kept</span>
       </div>
       <p class="sec-sub">Every previous day, in full. Older links may have expired at the source.</p>
       <details class="group" open>
         <summary>
           <span class="g-mark"></span>
           <span class="g-date">Wednesday, 12 August 2026</span>
-          <span class="g-count">1 posting</span>
+          <span class="g-count">2 postings</span>
         </summary>
         <div class="entries">
         <div class="entry"
              data-cat="other" data-q="lead voucher examiner/alternate class b cashier u.s. embassy port of spain port of spain, trinidad &amp;amp; tobago us embassy" data-key="https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=rzdkk3lnpt0&amp;returnToSearch=true&amp;jnum=75871&amp;orgId=175">
           <a class="entry-link" href="https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=rzdkk3lnpt0&amp;returnToSearch=true&amp;jnum=75871&amp;orgId=175" target="_blank" rel="noopener">
+            <span class="entry-body">
+              <span class="entry-title">Lead Voucher Examiner/Alternate Class B Cashier</span>
+              <span class="entry-meta"><em>U.S. Embassy Port of Spain</em> &middot; Port of Spain, Trinidad &amp; Tobago</span>
+            </span>
+            <span class="entry-side"><span class="entry-src">US Embassy</span></span>
+            <span class="entry-go">Read&nbsp;&rarr;</span>
+          </a>
+          <span class="entry-acts">
+            <button class="act act-fav" type="button" data-act="fav" aria-pressed="false"
+                    aria-label="Save to favourites" title="Save to favourites">
+              <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M8 1.6l1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z"
+                      fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="act act-bin" type="button" data-act="bin"
+                    aria-label="Move to trash" title="Move to trash">
+              <svg class="i-bin" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2.8 4.3h10.4M6.2 4.3V2.9h3.6v1.4M4.2 4.3l.6 8.4h6.4l.6-8.4M6.6 6.6v4M9.4 6.6v4"
+                      fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+              <svg class="i-undo" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M3 8a5 5 0 1 1 1.5 3.6" fill="none" stroke="currentColor"
+                      stroke-width="1.4" stroke-linecap="round"/>
+                <path d="M2.6 4.6V8h3.4" fill="none" stroke="currentColor"
+                      stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </span>
+        </div>
+        <div class="entry"
+             data-cat="other" data-q="lead voucher examiner/alternate class b cashier u.s. embassy port of spain port of spain, trinidad &amp;amp; tobago us embassy" data-key="https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=auj0azvbpt0&amp;returnToSearch=true&amp;jnum=75871&amp;orgId=175">
+          <a class="entry-link" href="https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=auj0azvbpt0&amp;returnToSearch=true&amp;jnum=75871&amp;orgId=175" target="_blank" rel="noopener">
             <span class="entry-body">
               <span class="entry-title">Lead Voucher Examiner/Alternate Class B Cashier</span>
               <span class="entry-meta"><em>U.S. Embassy Port of Spain</em> &middot; Port of Spain, Trinidad &amp; Tobago</span>
@@ -4658,6 +4835,12 @@
 
   </div>
 
+  <div class="stop-press" id="stop-press" role="status" hidden>
+    <span><b>Stop press</b> &mdash; a later edition has been filed.</span>
+    <button type="button" class="read">Read it</button>
+    <button type="button" class="dismiss" aria-label="Dismiss">&times;</button>
+  </div>
+
 <script>
   (function () {
     var q = document.getElementById('q');
@@ -4821,16 +5004,74 @@
     var refresh = document.getElementById('refresh');
     var label = refresh.querySelector('.refresh-label');
 
+    function hardReload() {
+      location.replace(location.pathname + '?v=' + new Date().getTime() + location.hash);
+    }
+
     refresh.addEventListener('click', function () {
       refresh.disabled = true;
       label.textContent = 'Refreshing';
-      location.replace(location.pathname + '?v=' + new Date().getTime() + location.hash);
+      hardReload();
     });
 
     // Having done its job, the cache-buster is scrubbed from the address bar
     // so the URL people copy or bookmark stays clean.
     if (location.search.indexOf('v=') !== -1 && window.history && history.replaceState) {
       history.replaceState(null, '', location.pathname + location.hash);
+    }
+
+    // ------------------------------------------------ watching for a new edition
+    // This page is a static file, so a tab left open overnight keeps showing
+    // whichever edition it was served. The archive it was built from is stamped
+    // below; jobs.json carries the same stamp and is rewritten by every run that
+    // finds something, so a stamp newer than this one means a fresh edition is
+    // already sitting on the server.
+    var BUILT_FROM = '2026-08-12T10:54:11Z';
+    var POLL_MS = 4 * 60 * 1000;
+    var press = document.getElementById('stop-press');
+    var pressed = false;
+
+    function newerEditionExists(stamp) {
+      return typeof stamp === 'string' && stamp > BUILT_FROM;
+    }
+
+    function announce() {
+      if (pressed) return;
+      pressed = true;
+      // Nobody is reading a backgrounded tab, so it can just swap itself out
+      // and be current by the time it is looked at again.
+      if (document.hidden) { hardReload(); return; }
+      press.hidden = false;
+      // Painted hidden first so the slide-up transition actually runs.
+      requestAnimationFrame(function () { press.classList.add('up'); });
+    }
+
+    function poll() {
+      if (pressed || !window.fetch) return;
+      // Both caches have to be stepped around: the query string defeats the
+      // CDN, no-store defeats the browser.
+      fetch('jobs.json?t=' + new Date().getTime(), { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          if (data && newerEditionExists(data.updated)) announce();
+        })
+        .catch(function () { /* offline or mid-deploy; the next tick retries */ });
+    }
+
+    if (press) {
+      press.querySelector('.read').addEventListener('click', hardReload);
+      press.querySelector('.dismiss').addEventListener('click', function () {
+        press.classList.remove('up');
+        setTimeout(function () { press.hidden = true; }, 350);
+      });
+
+      setInterval(poll, POLL_MS);
+      // Timers are throttled hard in background tabs, so coming back to one is
+      // the moment most likely to be showing something stale.
+      document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) poll();
+      });
+      poll();
     }
   })();
 </script>

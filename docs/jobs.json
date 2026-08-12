@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-12T02:34:20Z",
-  "count": 121,
+  "updated": "2026-08-12T10:55:13Z",
+  "count": 125,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -1090,6 +1090,42 @@
       "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=auj0azvbpt0&returnToSearch=true&jnum=75871&orgId=175",
       "category": "other",
       "first_seen": "2026-08-12T02:32:56Z"
+    },
+    {
+      "title": "Operations Manager",
+      "company": "RN Syzygy Employment Relations Ltd",
+      "location": "Central",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/operations-manager-3",
+      "category": "other",
+      "first_seen": "2026-08-12T10:54:11Z"
+    },
+    {
+      "title": "Associate II - Payroll",
+      "company": "ARK Outsourcing Limited",
+      "location": "Chaguanas",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/associate-ii-payroll-1",
+      "category": "other",
+      "first_seen": "2026-08-12T10:54:11Z"
+    },
+    {
+      "title": "Corporate Sales Representative – Service Sales",
+      "company": "RN Syzygy Employment Relations Ltd",
+      "location": "Central",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/corporate-sales-representative-service-sales",
+      "category": "other",
+      "first_seen": "2026-08-12T10:54:11Z"
+    },
+    {
+      "title": "Lead Voucher Examiner/Alternate Class B Cashier",
+      "company": "U.S. Embassy Port of Spain",
+      "location": "Port of Spain, Trinidad & Tobago",
+      "source": "US Embassy",
+      "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=lzbpznrnpt0&returnToSearch=true&jnum=75871&orgId=175",
+      "category": "other",
+      "first_seen": "2026-08-12T10:54:11Z"
     }
   ]
 }
