@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-14T23:21:11Z",
-  "count": 190,
+  "updated": "2026-08-15T10:16:30Z",
+  "count": 191,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -1711,6 +1711,15 @@
       "link": "https://employtt.gov.tt/jobs/view/2570",
       "category": "other",
       "first_seen": "2026-08-14T23:19:20Z"
+    },
+    {
+      "title": "Restaurant Manager",
+      "company": "DaChin Group",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/608984786-restaurant-manager",
+      "category": "other",
+      "first_seen": "2026-08-15T10:14:27Z"
     }
   ]
 }
