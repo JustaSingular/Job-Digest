@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-15T10:16:30Z",
-  "count": 191,
+  "updated": "2026-08-15T23:18:47Z",
+  "count": 193,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -1720,6 +1720,24 @@
       "link": "https://islandjobhunt.com/jobs/608984786-restaurant-manager",
       "category": "other",
       "first_seen": "2026-08-15T10:14:27Z"
+    },
+    {
+      "title": "AI and Transport Digital Transformation Consultant",
+      "company": "Inter-American Development Bank",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/611591049-ai-and-transport-digital-transformation-consultant",
+      "category": "it",
+      "first_seen": "2026-08-15T23:17:36Z"
+    },
+    {
+      "title": "IDB Invest - Legal Officer - Corporate and Infrastructure Legal Division",
+      "company": "IDB Invest",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/611591050-idb-invest-legal-officer-corporate-and-infrastructure-legal-division",
+      "category": "other",
+      "first_seen": "2026-08-15T23:17:36Z"
     }
   ]
 }
