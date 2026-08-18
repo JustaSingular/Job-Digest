@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-17T23:22:05Z",
-  "count": 209,
+  "updated": "2026-08-18T10:21:13Z",
+  "count": 210,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -1882,6 +1882,15 @@
       "link": "https://employtt.gov.tt/jobs/view/2599",
       "category": "other",
       "first_seen": "2026-08-17T23:20:23Z"
+    },
+    {
+      "title": "COM-DCM Chauffeur",
+      "company": "U.S. Embassy Port of Spain",
+      "location": "Port of Spain, Trinidad & Tobago",
+      "source": "US Embassy",
+      "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=qle1vex3pt0&returnToSearch=true&jnum=76984&orgId=175",
+      "category": "other",
+      "first_seen": "2026-08-18T10:19:58Z"
     }
   ]
 }
