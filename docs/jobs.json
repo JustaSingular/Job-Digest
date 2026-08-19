@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-19T10:21:45Z",
-  "count": 234,
+  "updated": "2026-08-19T23:22:21Z",
+  "count": 242,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -2107,6 +2107,78 @@
       "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=ow1oruz3pt0&returnToSearch=true&jnum=76984&orgId=175",
       "category": "other",
       "first_seen": "2026-08-19T10:20:38Z"
+    },
+    {
+      "title": "IT Technician",
+      "company": "Nearshore Teleservices Trinidad",
+      "location": "Tunapuna-Piarco, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/623413404-it-technician",
+      "category": "it",
+      "first_seen": "2026-08-19T23:20:08Z"
+    },
+    {
+      "title": "Senior Databricks Solution Architect",
+      "company": "Unison Group",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/623413402-senior-databricks-solution-architect",
+      "category": "it",
+      "first_seen": "2026-08-19T23:20:08Z"
+    },
+    {
+      "title": "Part-Time In-House Proofreader",
+      "company": "J'Abeille Language Services Ltd.",
+      "location": "San Fernando, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/623413403-part-time-in-house-proofreader",
+      "category": "other",
+      "first_seen": "2026-08-19T23:20:08Z"
+    },
+    {
+      "title": "Junior Human Resource Assistant",
+      "company": "Jo-Anne Mouttet & Associates",
+      "location": "St. Augustine/Valsayn, Trincity, Tunapuna/Piarco",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Junior-Human-Resource-Assistant-Job-237171.aspx",
+      "category": "other",
+      "first_seen": "2026-08-19T23:20:08Z"
+    },
+    {
+      "title": "Head Pharmaceuticals and Supply Chain Management",
+      "company": "NIPDEC",
+      "location": "D'Martin/Chaguaramas, Port-of-Spain",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Head-Pharmaceuticals-and-Supply-Chain-Job-237135.aspx",
+      "category": "other",
+      "first_seen": "2026-08-19T23:20:08Z"
+    },
+    {
+      "title": "BUSINESS DEVELOPMENT EXECUTIVE",
+      "company": "Studley Park Enterprise",
+      "location": "Port-of-Spain, Tobago",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/BUSINESS-DEVELOPMENT-EXECUTIVE-Job-237113.aspx",
+      "category": "other",
+      "first_seen": "2026-08-19T23:20:08Z"
+    },
+    {
+      "title": "Cashier Supervisor",
+      "company": "",
+      "location": "Arima/Sangre Grande, Trincity, Tunapuna/Piarco",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Cashier-Supervisor-Job-237122.aspx",
+      "category": "other",
+      "first_seen": "2026-08-19T23:20:08Z"
+    },
+    {
+      "title": "Cashier (MALE CANDIDATES PREFERRED)",
+      "company": "Jo-Anne Mouttet & Associates",
+      "location": "Arima/Sangre Grande, Tunapuna/Piarco",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Cashier-MALE-CANDIDATES-PREFERRED-Job-237119.aspx",
+      "category": "other",
+      "first_seen": "2026-08-19T23:20:08Z"
     }
   ]
 }
