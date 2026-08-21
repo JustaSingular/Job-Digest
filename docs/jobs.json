@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-20T23:24:55Z",
-  "count": 263,
+  "updated": "2026-08-21T10:23:05Z",
+  "count": 268,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -2368,6 +2368,51 @@
       "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=rnftl1jbpt0&returnToSearch=true&jnum=76984&orgId=175",
       "category": "other",
       "first_seen": "2026-08-20T23:23:06Z"
+    },
+    {
+      "title": "Knowledge and Information Management Assistant",
+      "company": "",
+      "location": "Port of Spain",
+      "source": "EveCaribbean",
+      "link": "https://evecaribbean.com/tt/job/knowledge-and-information-management-assistant/",
+      "category": "it",
+      "first_seen": "2026-08-21T10:21:26Z"
+    },
+    {
+      "title": "Security Agent, Doc Verification Checks",
+      "company": "Caribbean Airlines",
+      "location": "Piarco",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/628281490-security-agent-doc-verification-checks",
+      "category": "other",
+      "first_seen": "2026-08-21T10:21:26Z"
+    },
+    {
+      "title": "Senior Manager, Security",
+      "company": "Caribbean Airlines",
+      "location": "Piarco",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/628281489-senior-manager-security",
+      "category": "other",
+      "first_seen": "2026-08-21T10:21:26Z"
+    },
+    {
+      "title": "Senior Accounting Assistant",
+      "company": "",
+      "location": "Port of Spain",
+      "source": "EveCaribbean",
+      "link": "https://evecaribbean.com/tt/job/senior-accounting-assistant/",
+      "category": "other",
+      "first_seen": "2026-08-21T10:21:26Z"
+    },
+    {
+      "title": "COM-DCM Chauffeur",
+      "company": "U.S. Embassy Port of Spain",
+      "location": "Port of Spain, Trinidad & Tobago",
+      "source": "US Embassy",
+      "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=akowclfbpt0&returnToSearch=true&jnum=76984&orgId=175",
+      "category": "other",
+      "first_seen": "2026-08-21T10:21:26Z"
     }
   ]
 }
