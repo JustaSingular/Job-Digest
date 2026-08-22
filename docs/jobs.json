@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-22T10:16:33Z",
-  "count": 282,
+  "updated": "2026-08-22T23:20:01Z",
+  "count": 286,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -2539,6 +2539,42 @@
       "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=y3hpzhznpt0&returnToSearch=true&jnum=76984&orgId=175",
       "category": "other",
       "first_seen": "2026-08-22T10:14:47Z"
+    },
+    {
+      "title": "Director Issuing, Merchant Services and Physical Channels",
+      "company": "RBC",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/633052646-director-issuing-merchant-services-and-physical-channels",
+      "category": "other",
+      "first_seen": "2026-08-22T23:18:34Z"
+    },
+    {
+      "title": "Regional Manager LPG",
+      "company": "Sol Petroleum",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/633052645-regional-manager-lpg",
+      "category": "other",
+      "first_seen": "2026-08-22T23:18:34Z"
+    },
+    {
+      "title": "Customer Experience Representative",
+      "company": "Coops Car Care City Limited / Coop's Corporation Limited",
+      "location": "Chaguanas / San Fernando / San Juan/Barataria",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Customer-Experience-Representative-Job-237319.aspx",
+      "category": "other",
+      "first_seen": "2026-08-22T23:18:34Z"
+    },
+    {
+      "title": "COM-DCM Chauffeur",
+      "company": "U.S. Embassy Port of Spain",
+      "location": "Port of Spain, Trinidad & Tobago",
+      "source": "US Embassy",
+      "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=bfljoerbpt0&returnToSearch=true&jnum=76984&orgId=175",
+      "category": "other",
+      "first_seen": "2026-08-22T23:18:34Z"
     }
   ]
 }
