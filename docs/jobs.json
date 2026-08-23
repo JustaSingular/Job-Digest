@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-22T23:20:01Z",
-  "count": 286,
+  "updated": "2026-08-23T10:17:26Z",
+  "count": 288,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -2575,6 +2575,24 @@
       "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=bfljoerbpt0&returnToSearch=true&jnum=76984&orgId=175",
       "category": "other",
       "first_seen": "2026-08-22T23:18:34Z"
+    },
+    {
+      "title": "Production Analyst",
+      "company": "Jo-Anne Mouttet & Associates",
+      "location": "Trincity",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Production-Analyst-Job-237320.aspx",
+      "category": "other",
+      "first_seen": "2026-08-23T10:15:17Z"
+    },
+    {
+      "title": "COM-DCM Chauffeur",
+      "company": "U.S. Embassy Port of Spain",
+      "location": "Port of Spain, Trinidad & Tobago",
+      "source": "US Embassy",
+      "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=mjr0r0vbpt0&returnToSearch=true&jnum=76984&orgId=175",
+      "category": "other",
+      "first_seen": "2026-08-23T10:15:17Z"
     }
   ]
 }
