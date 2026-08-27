@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-26T10:28:11Z",
-  "count": 326,
+  "updated": "2026-08-27T04:15:06Z",
+  "count": 333,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -2935,6 +2935,69 @@
       "link": "http://www.np.co.tt/wp-content/uploads/2026/08/NP-Employment-Opp-Security-Services-Supervisor-2026.02-External-21-08-26.pdf",
       "category": "other",
       "first_seen": "2026-08-25T23:23:09Z"
+    },
+    {
+      "title": "IT Manager",
+      "company": "Trinidad Ropeworks Limited",
+      "location": "North East",
+      "source": "JobsTT",
+      "link": "https://www.jobstt.com/job/it-manager",
+      "category": "it",
+      "first_seen": "2026-08-27T04:12:59Z"
+    },
+    {
+      "title": "IT Technician (Guyana)",
+      "company": "Movie Towne",
+      "location": "Demerara-Mahaica",
+      "source": "JobsTT",
+      "link": "https://www.jobstt.com/job/it-technician-guyana",
+      "category": "it",
+      "first_seen": "2026-08-27T04:12:59Z"
+    },
+    {
+      "title": "Marketing and Sales Assistant",
+      "company": "pennacool.com Caribbean Limited",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/644790927-marketing-and-sales-assistant",
+      "category": "other",
+      "first_seen": "2026-08-27T04:12:59Z"
+    },
+    {
+      "title": "Legal Secretary",
+      "company": "D. Allison Prowell & Co",
+      "location": "North West",
+      "source": "JobsTT",
+      "link": "https://www.jobstt.com/job/legal-secretary",
+      "category": "other",
+      "first_seen": "2026-08-27T04:12:59Z"
+    },
+    {
+      "title": "medical floor attendant",
+      "company": "",
+      "location": "Chaguanas",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/medical-floor-attendant-Job-237528.aspx",
+      "category": "other",
+      "first_seen": "2026-08-27T04:12:59Z"
+    },
+    {
+      "title": "Front Desk Representative",
+      "company": "",
+      "location": "Chaguanas",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Front-Desk-Representative-Job-237516.aspx",
+      "category": "other",
+      "first_seen": "2026-08-27T04:12:59Z"
+    },
+    {
+      "title": "Auditor 1",
+      "company": "Trinidad Generation Unlimited",
+      "location": "Chaguanas",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Auditor-1-Job-237480.aspx",
+      "category": "other",
+      "first_seen": "2026-08-27T04:12:59Z"
     }
   ]
 }
