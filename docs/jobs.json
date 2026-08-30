@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-29T14:52:02Z",
-  "count": 366,
+  "updated": "2026-08-30T01:03:32Z",
+  "count": 369,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -3295,6 +3295,33 @@
       "link": "https://employtt.gov.tt/jobs/view/2620",
       "category": "other",
       "first_seen": "2026-08-29T04:00:45Z"
+    },
+    {
+      "title": "Associate Sales Engineer, B2B",
+      "company": "Liberty Business",
+      "location": "Tunapuna-Piarco, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/651566176-associate-sales-engineer-b2b",
+      "category": "other",
+      "first_seen": "2026-08-30T01:02:06Z"
+    },
+    {
+      "title": "Regional Sales Manager - Caribbean",
+      "company": "Palo Alto Networks",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/651566174-regional-sales-manager-caribbean",
+      "category": "other",
+      "first_seen": "2026-08-30T01:02:06Z"
+    },
+    {
+      "title": "Draw Coordinator I",
+      "company": "Brightstar Lottery",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/651566175-draw-coordinator-i",
+      "category": "other",
+      "first_seen": "2026-08-30T01:02:06Z"
     }
   ]
 }
