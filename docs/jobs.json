@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-01T01:38:39Z",
-  "count": 379,
+  "updated": "2026-09-01T14:26:02Z",
+  "count": 387,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -3412,6 +3412,78 @@
       "link": "https://www.caribbeanjobs.com/Manager-Senior-Manager-Target-Operating-Job-237743.aspx",
       "category": "other",
       "first_seen": "2026-08-31T17:19:30Z"
+    },
+    {
+      "title": "Delivery Driver",
+      "company": "The Drinks LLAB",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/654988012-delivery-driver",
+      "category": "other",
+      "first_seen": "2026-09-01T14:25:19Z"
+    },
+    {
+      "title": "Research Analyst – Science synthesis and capacity building",
+      "company": "Climate Analytics",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/654988011-research-analyst-science-synthesis-and-capacity-building",
+      "category": "other",
+      "first_seen": "2026-09-01T14:25:19Z"
+    },
+    {
+      "title": "Assistant Accountant",
+      "company": "Aero Services Credit Union (ASCU)",
+      "location": "Chaguanas, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/654988010-assistant-accountant",
+      "category": "other",
+      "first_seen": "2026-09-01T14:25:19Z"
+    },
+    {
+      "title": "PEC Consultant - Research Department (RES) Macroeconomist",
+      "company": "Inter-American Development Bank",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/654988009-pec-consultant-research-department-res-macroeconomist",
+      "category": "other",
+      "first_seen": "2026-09-01T14:25:19Z"
+    },
+    {
+      "title": "Restaurant Manager",
+      "company": "The Dachin Group of Companies",
+      "location": "Port-of-Spain",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Restaurant-Manager-Job-237814.aspx",
+      "category": "other",
+      "first_seen": "2026-09-01T14:25:19Z"
+    },
+    {
+      "title": "Security Officer - Trinidad",
+      "company": "Security Environment Safety and Logistics INC",
+      "location": "Couva/Point Lisas",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Security-Officer-Trinidad-Job-237809.aspx",
+      "category": "other",
+      "first_seen": "2026-09-01T14:25:19Z"
+    },
+    {
+      "title": "Sales Manager",
+      "company": "",
+      "location": "Couva/Point Lisas",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Sales-Manager-Job-237804.aspx",
+      "category": "other",
+      "first_seen": "2026-09-01T14:25:19Z"
+    },
+    {
+      "title": "Monitoring and Evaluation Specialist",
+      "company": "Office of the Prime Minister",
+      "location": "St. Clair",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2621",
+      "category": "other",
+      "first_seen": "2026-09-01T14:25:19Z"
     }
   ]
 }
