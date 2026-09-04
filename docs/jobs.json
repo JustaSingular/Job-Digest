@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-03T14:02:47Z",
-  "count": 446,
+  "updated": "2026-09-04T00:47:08Z",
+  "count": 460,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -4015,6 +4015,132 @@
       "link": "https://evecaribbean.com/tt/job/content-creator/",
       "category": "other",
       "first_seen": "2026-09-03T14:01:14Z"
+    },
+    {
+      "title": "Senior Manager Software Development (RIBS)",
+      "company": "RBC",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/663626737-senior-manager-software-development-ribs",
+      "category": "it",
+      "first_seen": "2026-09-04T00:45:35Z"
+    },
+    {
+      "title": "Quality Engineer",
+      "company": "RBC",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/663626736-quality-engineer",
+      "category": "it",
+      "first_seen": "2026-09-04T00:45:35Z"
+    },
+    {
+      "title": "Vice President – Asset Management & Research",
+      "company": "TheHiveCareers",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/663626745-vice-president-asset-management-research",
+      "category": "other",
+      "first_seen": "2026-09-04T00:45:35Z"
+    },
+    {
+      "title": "Coded Welder",
+      "company": "Arawak And Company Limited",
+      "location": "Arima, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/663626744-coded-welder",
+      "category": "other",
+      "first_seen": "2026-09-04T00:45:35Z"
+    },
+    {
+      "title": "Claims Officer - Motor",
+      "company": "Coralisle Group Ltd.",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/663626743-claims-officer-motor",
+      "category": "other",
+      "first_seen": "2026-09-04T00:45:35Z"
+    },
+    {
+      "title": "Insurance Professional",
+      "company": "Guardian Life of the Caribbean Limited",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/663626742-insurance-professional",
+      "category": "other",
+      "first_seen": "2026-09-04T00:45:35Z"
+    },
+    {
+      "title": "Account Manager",
+      "company": "Amaranth Business Solutions Limited",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/663626741-account-manager",
+      "category": "other",
+      "first_seen": "2026-09-04T00:45:35Z"
+    },
+    {
+      "title": "Relationship Manager",
+      "company": "RBC",
+      "location": "San Fernando, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/663626740-relationship-manager",
+      "category": "other",
+      "first_seen": "2026-09-04T00:45:35Z"
+    },
+    {
+      "title": "Deputy CEO",
+      "company": "TheHiveCareers",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/663626739-deputy-ceo",
+      "category": "other",
+      "first_seen": "2026-09-04T00:45:35Z"
+    },
+    {
+      "title": "Assistant Manager, Business and Regulatory Initiatives",
+      "company": "RBC",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/663626738-assistant-manager-business-and-regulatory-initiatives",
+      "category": "other",
+      "first_seen": "2026-09-04T00:45:35Z"
+    },
+    {
+      "title": "Sr. Accountant",
+      "company": "CARENET HEALTH HQ",
+      "location": "Port-of-Spain",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Sr-Accountant-Job-237990.aspx",
+      "category": "other",
+      "first_seen": "2026-09-04T00:45:35Z"
+    },
+    {
+      "title": "Human Resources Assistant",
+      "company": "",
+      "location": "San Juan/Barataria",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Human-Resources-Assistant-Job-237976.aspx",
+      "category": "other",
+      "first_seen": "2026-09-04T00:45:35Z"
+    },
+    {
+      "title": "Accounting Assistant",
+      "company": "",
+      "location": "Barataria",
+      "source": "EveCaribbean",
+      "link": "https://evecaribbean.com/tt/job/accounting-assistant/",
+      "category": "other",
+      "first_seen": "2026-09-04T00:45:35Z"
+    },
+    {
+      "title": "Market Acceleration Lead",
+      "company": "Digicel",
+      "location": "Kingston, JM, WI",
+      "source": "Digicel",
+      "link": "https://careers.digicelgroup.com/job/Kingston-Market-Acceleration-Lead-WI/1371269657/",
+      "category": "other",
+      "first_seen": "2026-09-04T00:45:35Z"
     }
   ]
 }
