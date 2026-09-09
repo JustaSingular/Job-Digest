@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-09T01:04:09Z",
-  "count": 545,
+  "updated": "2026-09-09T14:05:35Z",
+  "count": 549,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -4906,6 +4906,42 @@
       "link": "https://employtt.gov.tt/jobs/view/2449",
       "category": "other",
       "first_seen": "2026-09-09T01:02:26Z"
+    },
+    {
+      "title": "CORPORATE SECRETARY",
+      "company": "Public Transport Service Corporation",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2645",
+      "category": "other",
+      "first_seen": "2026-09-09T14:03:57Z"
+    },
+    {
+      "title": "MANAGER SALES & PRODUCT DEVELOPMENT ONE (1) POSITION",
+      "company": "Public Transport Service Corporation",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2644",
+      "category": "other",
+      "first_seen": "2026-09-09T14:03:57Z"
+    },
+    {
+      "title": "Second (2nd) Officer",
+      "company": "Port Authority of Trinidad and Tobago",
+      "location": "Trinidad & Tobago",
+      "source": "Port Authority",
+      "link": "https://www.patnt.com/about/vacancies/#second-2nd-officer",
+      "category": "other",
+      "first_seen": "2026-09-09T14:03:57Z"
+    },
+    {
+      "title": "Mechanical Foreman (Port of Scarborough)",
+      "company": "Port Authority of Trinidad and Tobago",
+      "location": "Trinidad & Tobago",
+      "source": "Port Authority",
+      "link": "https://www.patnt.com/about/vacancies/#mechanical-foreman-port-of-scarborough",
+      "category": "other",
+      "first_seen": "2026-09-09T14:03:57Z"
     }
   ]
 }
