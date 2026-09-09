@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-08T14:03:02Z",
-  "count": 535,
+  "updated": "2026-09-09T01:04:09Z",
+  "count": 545,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -4816,6 +4816,96 @@
       "link": "https://employtt.gov.tt/jobs/view/2643",
       "category": "other",
       "first_seen": "2026-09-08T14:01:28Z"
+    },
+    {
+      "title": "IT Systems Engineer",
+      "company": "Incredible People Resources Limited",
+      "location": "San Fernando, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/678169266-it-systems-engineer",
+      "category": "it",
+      "first_seen": "2026-09-09T01:02:26Z"
+    },
+    {
+      "title": "IT Technician",
+      "company": "Jo-Anne Mouttet & Associates",
+      "location": "Mt.Hope/Curepe",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/IT-Technician-Job-238260.aspx",
+      "category": "it",
+      "first_seen": "2026-09-09T01:02:26Z"
+    },
+    {
+      "title": "Recruiter",
+      "company": "Ford Motor Company",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/678169267-recruiter",
+      "category": "other",
+      "first_seen": "2026-09-09T01:02:26Z"
+    },
+    {
+      "title": "Dispatch Coordinator",
+      "company": "RN Syzygy Employment Relations Ltd",
+      "location": "North West",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/dispatch-coordinator",
+      "category": "other",
+      "first_seen": "2026-09-09T01:02:26Z"
+    },
+    {
+      "title": "Courier",
+      "company": "RN Syzygy Employment Relations Ltd",
+      "location": "North West",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/courier-2",
+      "category": "other",
+      "first_seen": "2026-09-09T01:02:26Z"
+    },
+    {
+      "title": "Operations Manager",
+      "company": "RN Syzygy Employment Relations Ltd",
+      "location": "Central",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/operations-manager-4",
+      "category": "other",
+      "first_seen": "2026-09-09T01:02:26Z"
+    },
+    {
+      "title": "Purchasing Officer",
+      "company": "RN Syzygy Employment Relations Ltd",
+      "location": "St James or Woodbrook",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/purchasing-officer-5",
+      "category": "other",
+      "first_seen": "2026-09-09T01:02:26Z"
+    },
+    {
+      "title": "Operations Coordinator",
+      "company": "RN Syzygy Employment Relations Ltd",
+      "location": "North West",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/operations-coordinator-1",
+      "category": "other",
+      "first_seen": "2026-09-09T01:02:26Z"
+    },
+    {
+      "title": "Economist II",
+      "company": "National Institute of Higher Education, Research, Science and Technology (NIHERST)",
+      "location": "Barataria",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2442",
+      "category": "other",
+      "first_seen": "2026-09-09T01:02:26Z"
+    },
+    {
+      "title": "Statistical Assistant",
+      "company": "National Institute of Higher Education, Research, Science and Technology (NIHERST)",
+      "location": "Barataria",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2449",
+      "category": "other",
+      "first_seen": "2026-09-09T01:02:26Z"
     }
   ]
 }
