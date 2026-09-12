@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-12T00:56:11Z",
-  "count": 612,
+  "updated": "2026-09-12T13:18:04Z",
+  "count": 618,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -5509,6 +5509,60 @@
       "link": "https://www.caribbeanjobs.com/RESTAURANT-SUPERVISOR-Job-238486.aspx",
       "category": "other",
       "first_seen": "2026-09-12T00:54:23Z"
+    },
+    {
+      "title": "Electronic Security Systems Technician",
+      "company": "Designer Systems Limited",
+      "location": "South West",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/electronic-security-systems-technician-1",
+      "category": "other",
+      "first_seen": "2026-09-12T13:16:32Z"
+    },
+    {
+      "title": "Fire Extinguisher Service Technician",
+      "company": "Designer Systems Limited",
+      "location": "South West",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/fire-extinguisher-service-technician",
+      "category": "other",
+      "first_seen": "2026-09-12T13:16:32Z"
+    },
+    {
+      "title": "Laboratory Supervisor",
+      "company": "Kaizen Environmental Services (T’dad) Limited",
+      "location": "Central",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/laboratory-supervisor",
+      "category": "other",
+      "first_seen": "2026-09-12T13:16:32Z"
+    },
+    {
+      "title": "Senior Lab Analyst",
+      "company": "Kaizen Environmental Services (T’dad) Limited",
+      "location": "Central",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/senior-lab-analyst",
+      "category": "other",
+      "first_seen": "2026-09-12T13:16:32Z"
+    },
+    {
+      "title": "Client Experience Officer",
+      "company": "Hidden Jewels Co.",
+      "location": "Chaguanas",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/client-experience-officer",
+      "category": "other",
+      "first_seen": "2026-09-12T13:16:32Z"
+    },
+    {
+      "title": "Head of Commercial",
+      "company": "Digicel",
+      "location": "St. Michael, BB",
+      "source": "Digicel",
+      "link": "https://careers.digicelgroup.com/job/St_-Michael-Head-of-Commercial/1369552957/",
+      "category": "other",
+      "first_seen": "2026-09-12T13:16:32Z"
     }
   ]
 }
