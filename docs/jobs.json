@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-02T02:03:34Z",
-  "count": 931,
+  "updated": "2026-10-02T16:04:40Z",
+  "count": 934,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -8380,6 +8380,33 @@
       "link": "https://careers.digicelgroup.com/job/Port-au-Prince-Financial-Controller/1373379357/",
       "category": "other",
       "first_seen": "2026-10-02T02:00:18Z"
+    },
+    {
+      "title": "IT Technician",
+      "company": "National Insurance Property Development Company Limited (NIPDEC)",
+      "location": "Chaguaramas",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2768",
+      "category": "it",
+      "first_seen": "2026-10-02T16:02:10Z"
+    },
+    {
+      "title": "Legal Counsel",
+      "company": "Shell",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/736419954-legal-legal-counsel",
+      "category": "other",
+      "first_seen": "2026-10-02T16:02:10Z"
+    },
+    {
+      "title": "Front Desk Representative",
+      "company": "",
+      "location": "Chaguanas, Couva/Point Lisas",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Front-Desk-Representative-Job-238745.aspx",
+      "category": "other",
+      "first_seen": "2026-10-02T16:02:10Z"
     }
   ]
 }
