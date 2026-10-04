@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-04T02:24:52Z",
-  "count": 965,
+  "updated": "2026-10-04T15:04:58Z",
+  "count": 968,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -8686,6 +8686,33 @@
       "link": "https://www.caribbeanjobs.com/Command-Centre-Operator-Trinidad-Job-239728.aspx",
       "category": "other",
       "first_seen": "2026-10-04T02:23:34Z"
+    },
+    {
+      "title": "STEEL WELDER - Certified",
+      "company": "Caddell Construction",
+      "location": "St Clair or Maraval",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/steel-welder-certified",
+      "category": "other",
+      "first_seen": "2026-10-04T15:02:41Z"
+    },
+    {
+      "title": "MECHANICAL WORKER",
+      "company": "Caddell Construction",
+      "location": "St Clair or Maraval",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/mechanical-worker",
+      "category": "other",
+      "first_seen": "2026-10-04T15:02:41Z"
+    },
+    {
+      "title": "CIVIL / STRUCTURAL WORKER",
+      "company": "Caddell Construction",
+      "location": "St Clair or Maraval",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/civil-structural-worker",
+      "category": "other",
+      "first_seen": "2026-10-04T15:02:41Z"
     }
   ]
 }
