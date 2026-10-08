@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-08T02:31:27Z",
-  "count": 1023,
+  "updated": "2026-10-08T17:07:35Z",
+  "count": 1027,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -9208,6 +9208,42 @@
       "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=qnljaw13pt0&returnToSearch=true&jnum=77845&orgId=175",
       "category": "other",
       "first_seen": "2026-10-08T02:30:03Z"
+    },
+    {
+      "title": "Conveyance Assistant",
+      "company": "Regency Recruitment and Resources Limited",
+      "location": "Chaguanas / Port-of-Spain / St. Augustine/Valsayn",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Conveyance-Assistant-Job-239976.aspx",
+      "category": "other",
+      "first_seen": "2026-10-08T17:05:51Z"
+    },
+    {
+      "title": "Maintenance Supervisor",
+      "company": "UNICOMER Group",
+      "location": "Chaguanas / Couva/Point Lisas",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Maintenance-Supervisor-Job-239968.aspx",
+      "category": "other",
+      "first_seen": "2026-10-08T17:05:51Z"
+    },
+    {
+      "title": "Civil Engineering Technician I",
+      "company": "Palo Seco Agricultural Enterprises Limited (PSAEL)",
+      "location": "Pointe-a-Pierre",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2794",
+      "category": "other",
+      "first_seen": "2026-10-08T17:05:51Z"
+    },
+    {
+      "title": "Chief of Protocol",
+      "company": "U.S. Embassy Port of Spain",
+      "location": "Port of Spain, Trinidad & Tobago",
+      "source": "US Embassy",
+      "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=cvr5cjjnpt0&returnToSearch=true&jnum=77845&orgId=175",
+      "category": "other",
+      "first_seen": "2026-10-08T17:05:51Z"
     }
   ]
 }
