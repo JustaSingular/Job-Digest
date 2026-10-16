@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-15T14:36:23Z",
-  "count": 1088,
+  "updated": "2026-10-16T01:01:03Z",
+  "count": 1133,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -9793,6 +9793,411 @@
       "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=azd0ovb3pt0&returnToSearch=true&jnum=77845&orgId=175",
       "category": "other",
       "first_seen": "2026-10-14T01:35:13Z"
+    },
+    {
+      "title": "Data Engineer",
+      "company": "First Citizens",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/771357533-data-engineer",
+      "category": "it",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Sr Technology Operations Analyst",
+      "company": "CARENET HEALTH HQ",
+      "location": "Chaguanas / Port-of-Spain",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Sr-Technology-Operations-Analyst-Job-240413.aspx",
+      "category": "it",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Web Designer",
+      "company": "Ministry of Culture and Community Development",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2836",
+      "category": "it",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Sales Representative",
+      "company": "TATIL Life",
+      "location": "San Fernando, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/771357538-sales-representative",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Production Planner",
+      "company": "Electrical Industries Group Ltd",
+      "location": "Tunapuna, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/771357537-production-planner",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Stewarding Team Leader",
+      "company": "Hyatt Regency",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/771357536-stewarding-team-leader",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Public Sector Sales Manager, B2B Sales",
+      "company": "Flow",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/771357535-public-sector-sales-manager-b2b-sales",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Junior Purchasing Assistant",
+      "company": "TYE Manufacturing Co. Ltd",
+      "location": "Chaguanas, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/771357534-junior-purchasing-assistant",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Part Time Spa Therapist",
+      "company": "Hyatt Regency",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/77135732-part-time-spa-therapist",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Tool Clerk",
+      "company": "Caribbean Airlines",
+      "location": "Piarco",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/770637455-tool-clerk",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Strategic Account Manager (Commercial)",
+      "company": "ACERH Caribe",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/770195796-strategic-account-manager-commercial",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Financial Advisor",
+      "company": "Sagicor Financial Company Ltd.",
+      "location": "San Fernando, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/770195795-financial-advisor",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Accountant I",
+      "company": "Brightstar Lottery",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/770195794-accountant-i",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Assistant Food and Beverage Director",
+      "company": "Hyatt Regency",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/770195793-assistant-food-and-beverage-director",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "QHSE Manager",
+      "company": "Gulf Engineering Services",
+      "location": "San Fernando, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/770195792-qhse-manager",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Spa Coordinator",
+      "company": "Hyatt Regency",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/770195791-spa-coordinator",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Group President",
+      "company": "TheHiveCareers",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/770195790-group-president",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Inside Sales Representative",
+      "company": "Tropical Shipping",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/770195789-inside-sales-representative",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Legal Administrative Assistant",
+      "company": "D.L Daniel & Associates LLC",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/770195788-legal-administrative-assistant",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Agente de recepción de spa",
+      "company": "Hyatt Regency",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/770195786-agente-de-recepcion-de-spa",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Manager – Social Impact & Strategic Partnerships",
+      "company": "Guardian Group",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/770195785-manager-social-impact-strategic-partnerships",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Online Tutor",
+      "company": "APLUSACADEMY",
+      "location": "Remote (Chaguanas, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/770195784-online-tutor",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "DCS/SIS Upgrade – Technical Assurance & QA/QC Specialists",
+      "company": "Core Group Resources",
+      "location": "Couva, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/770195782-dcs-sis-upgrade-technical-assurance-qa-qc-specialists",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Buyer",
+      "company": "S.M. Jaleel and Company Limited",
+      "location": "Oropouche or Otaheite, South West, TT",
+      "source": "JobsTT",
+      "link": "https://www.jobstt.com/job/buyer",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Quantity Surveyor",
+      "company": "",
+      "location": "Chaguanas / Couva/Point Lisas / San Fernando",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Quantity-Surveyor-Job-240398.aspx",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Procurement & Import Logistics Officer",
+      "company": "",
+      "location": "Chaguanas / Couva/Point Lisas / San Fernando",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Procurement-Import-Logistics-Officer-Job-240396.aspx",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Optical Service Representative- San Fernando & Princes Town",
+      "company": "UNICOMER Group",
+      "location": "Debe/Penal/Siparia / Mayaro/Rio Claro / San Fernando",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Optical-Service-Representative-San-Fernando-Job-240360.aspx",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Executive Support Officer",
+      "company": "",
+      "location": "Trincity / Tunapuna/Piarco",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Executive-Support-Officer-Job-240341.aspx",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Supervisor -Heath Safety Environment Quality",
+      "company": "Lease Operators Ltd",
+      "location": "Couva/Point Lisas / Point Fortin/La Brea / San Fernando",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Supervisor-Heath-Safety-Environment-Quality-Job-240364.aspx",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Operations Support Clerk- Officer",
+      "company": "Lease Operators Ltd",
+      "location": "Debe/Penal/Siparia / Point Fortin/La Brea / San Fernando",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Operations-Support-Clerk-Officer-Job-240362.aspx",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Store Administrator-San Fernando",
+      "company": "UNICOMER Group",
+      "location": "Chaguanas / Debe/Penal/Siparia / San Fernando",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Store-Administrator-San-Fernando-Job-240358.aspx",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Store Supervisor- Southpark",
+      "company": "UNICOMER Group",
+      "location": "San Fernando / Chaguanas / Debe/Penal/Siparia",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Store-Supervisor-Southpark-Job-240356.aspx",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Business Development - Officer",
+      "company": "Lease Operators Ltd",
+      "location": "Debe/Penal/Siparia / Point Fortin/La Brea / San Fernando",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Business-Development-Officer-Job-240354.aspx",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Animator",
+      "company": "Ministry of Culture and Community Development",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2833",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Audio Visual Officer",
+      "company": "Ministry of Culture and Community Development",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2835",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Business Manager",
+      "company": "Hyacinth Guy Human Resource Company",
+      "location": "San Juan",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2843",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Communications Officer",
+      "company": "Ministry of Culture and Community Development",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2830",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Content Creation Specialist",
+      "company": "Ministry of Culture and Community Development",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2831",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Graphic Designer",
+      "company": "Ministry of Culture and Community Development",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2829",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Multimedia/Social Media Officer",
+      "company": "Ministry of Culture and Community Development",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2832",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Procurement Officer I",
+      "company": "Ministry of Works and Infrastructure",
+      "location": "El Socorro",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2840",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Procurement Officer II",
+      "company": "Ministry of Works and Infrastructure",
+      "location": "El Socorro",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2841",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Senior Communications Officer",
+      "company": "Ministry of Culture and Community Development",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2828",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Videographer Editor",
+      "company": "Ministry of Culture and Community Development",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2834",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
+    },
+    {
+      "title": "Customer Service Representative",
+      "company": "Hadco",
+      "location": "Maraval",
+      "source": "Hadco",
+      "link": "https://hadcogroup.bamboohr.com/careers/136",
+      "category": "other",
+      "first_seen": "2026-10-16T00:59:43Z"
     }
   ]
 }
