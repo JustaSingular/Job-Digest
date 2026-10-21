@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-20T14:36:25Z",
-  "count": 1203,
+  "updated": "2026-10-21T01:18:08Z",
+  "count": 1209,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -10828,6 +10828,60 @@
       "link": "https://fa-eqnr-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1020/job/2023",
       "category": "other",
       "first_seen": "2026-10-20T01:34:15Z"
+    },
+    {
+      "title": "Operations Coordinator",
+      "company": "Tropical Shipping",
+      "location": "Couva, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/779439123-operations-coordinator",
+      "category": "other",
+      "first_seen": "2026-10-21T01:16:28Z"
+    },
+    {
+      "title": "Accounting Assistant - Payroll",
+      "company": "Caribbean Airlines",
+      "location": "Piarco",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/778828999-accounting-assistant-payroll",
+      "category": "other",
+      "first_seen": "2026-10-21T01:16:28Z"
+    },
+    {
+      "title": "Tele-Sales Supervisor",
+      "company": "Amplia Communications Limited",
+      "location": "Aranguez or Mount Hope or Curepe, North Central, TT",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/tele-sales-supervisor",
+      "category": "other",
+      "first_seen": "2026-10-21T01:16:28Z"
+    },
+    {
+      "title": "Growth Marketing Manager",
+      "company": "Progressive Recruitment Specialist",
+      "location": "Aranguez or Mount Hope or Curepe, North Central, TT",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/growth-marketing-manager",
+      "category": "other",
+      "first_seen": "2026-10-21T01:16:28Z"
+    },
+    {
+      "title": "Administrative Assistant",
+      "company": "Eve Anderson Recruitment Ltd",
+      "location": "Trincity",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Administrative-Assistant-Job-240572.aspx",
+      "category": "other",
+      "first_seen": "2026-10-21T01:16:28Z"
+    },
+    {
+      "title": "Business to Business Coordinator",
+      "company": "UNICOMER Group",
+      "location": "Chaguanas",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Business-to-Business-Coordinator-Job-240564.aspx",
+      "category": "other",
+      "first_seen": "2026-10-21T01:16:28Z"
     }
   ]
 }
