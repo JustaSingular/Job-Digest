@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-27T01:50:36Z",
-  "count": 1279,
+  "updated": "2026-10-27T15:40:37Z",
+  "count": 1283,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -11512,6 +11512,42 @@
       "link": "https://employtt.gov.tt/jobs/view/2873",
       "category": "other",
       "first_seen": "2026-10-27T01:48:32Z"
+    },
+    {
+      "title": "Service Centre Manager - ttconnect",
+      "company": "iGovTT",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2874",
+      "category": "it",
+      "first_seen": "2026-10-27T15:38:03Z"
+    },
+    {
+      "title": "Human Resources Assistant",
+      "company": "",
+      "location": "San Juan/Barataria",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Human-Resources-Assistant-Job-240899.aspx",
+      "category": "other",
+      "first_seen": "2026-10-27T15:38:03Z"
+    },
+    {
+      "title": "Legal Research Officer",
+      "company": "National Quarries Company Limited",
+      "location": "Arouca",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2875",
+      "category": "other",
+      "first_seen": "2026-10-27T15:38:03Z"
+    },
+    {
+      "title": "Techncial Assistant",
+      "company": "Chaguaramas Development Authority",
+      "location": "Chaguaramas",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2876",
+      "category": "other",
+      "first_seen": "2026-10-27T15:38:03Z"
     }
   ]
 }
