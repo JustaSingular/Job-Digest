@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-31T15:34:46Z",
-  "count": 1349,
+  "updated": "2026-11-01T01:51:33Z",
+  "count": 1351,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -12142,6 +12142,24 @@
       "link": "https://fa-eqnr-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1020/job/2024",
       "category": "other",
       "first_seen": "2026-10-31T02:00:06Z"
+    },
+    {
+      "title": "Systems Engineer",
+      "company": "Guardian Group",
+      "location": "Trinidad and Tobago",
+      "source": "Guardian Group",
+      "link": "https://fa-eqnr-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1020/job/2026",
+      "category": "it",
+      "first_seen": "2026-11-01T01:50:17Z"
+    },
+    {
+      "title": "Sales Representative - Safety Equipment",
+      "company": "Eve Anderson Recruitment Ltd",
+      "location": "Couva/Point Lisas / San Fernando",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Sales-Representative-Safety-Equipment-Job-241125.aspx",
+      "category": "other",
+      "first_seen": "2026-11-01T01:50:17Z"
     }
   ]
 }
