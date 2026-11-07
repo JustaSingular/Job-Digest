@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-06T17:05:45Z",
-  "count": 1427,
+  "updated": "2026-11-07T02:33:04Z",
+  "count": 1432,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -12844,6 +12844,51 @@
       "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=ue9oq0pbpt0&returnToSearch=true&jnum=78839&orgId=175",
       "category": "other",
       "first_seen": "2026-11-06T17:03:30Z"
+    },
+    {
+      "title": "Buying Manager (Optical)",
+      "company": "UNICOMER Group",
+      "location": "Chaguanas",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Buying-Manager-Optical-Job-241486.aspx",
+      "category": "other",
+      "first_seen": "2026-11-07T02:32:00Z"
+    },
+    {
+      "title": "Human Resource Officer",
+      "company": "National Helicopter Services Limited",
+      "location": "Couva",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2909",
+      "category": "other",
+      "first_seen": "2026-11-07T02:32:00Z"
+    },
+    {
+      "title": "Quality Manager",
+      "company": "National Helicopter Services Limited",
+      "location": "Couva",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2911",
+      "category": "other",
+      "first_seen": "2026-11-07T02:32:00Z"
+    },
+    {
+      "title": "Sales Assistant",
+      "company": "National Quarries Company Limited",
+      "location": "Arouca",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2910",
+      "category": "other",
+      "first_seen": "2026-11-07T02:32:00Z"
+    },
+    {
+      "title": "Project Control Engineer",
+      "company": "U.S. Embassy Port of Spain",
+      "location": "Port of Spain, Trinidad & Tobago",
+      "source": "US Embassy",
+      "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=cxpyeuzrpt0&returnToSearch=true&jnum=78839&orgId=175",
+      "category": "other",
+      "first_seen": "2026-11-07T02:32:00Z"
     }
   ]
 }
