@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-08T02:03:22Z",
-  "count": 1442,
+  "updated": "2026-11-08T16:29:08Z",
+  "count": 1447,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -12979,6 +12979,51 @@
       "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=smfnnlpnpt0&returnToSearch=true&jnum=78839&orgId=175",
       "category": "other",
       "first_seen": "2026-11-08T02:02:01Z"
+    },
+    {
+      "title": "Intelligence Agent",
+      "company": "Astute Protection Limited",
+      "location": "San Fernando, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/799210798-intelligence-agent",
+      "category": "other",
+      "first_seen": "2026-11-08T16:27:49Z"
+    },
+    {
+      "title": "Administrative Intern",
+      "company": "SLB",
+      "location": "San Fernando, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/799210797-administrative-intern",
+      "category": "other",
+      "first_seen": "2026-11-08T16:27:49Z"
+    },
+    {
+      "title": "Engineer Intern",
+      "company": "SLB",
+      "location": "San Fernando, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/799210796-engineer-intern",
+      "category": "other",
+      "first_seen": "2026-11-08T16:27:49Z"
+    },
+    {
+      "title": "Director, Account Management",
+      "company": "Mastercard",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/799210794-director-account-management",
+      "category": "other",
+      "first_seen": "2026-11-08T16:27:49Z"
+    },
+    {
+      "title": "Project Control Engineer",
+      "company": "U.S. Embassy Port of Spain",
+      "location": "Port of Spain, Trinidad & Tobago",
+      "source": "US Embassy",
+      "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=zzvls0frpt0&returnToSearch=true&jnum=78839&orgId=175",
+      "category": "other",
+      "first_seen": "2026-11-08T16:27:49Z"
     }
   ]
 }
