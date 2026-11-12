@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-11T17:39:49Z",
-  "count": 1448,
+  "updated": "2026-11-12T03:38:06Z",
+  "count": 1491,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -13033,6 +13033,393 @@
       "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=ctrybnp3pt0&returnToSearch=true&jnum=78839&orgId=175",
       "category": "other",
       "first_seen": "2026-11-09T02:21:29Z"
+    },
+    {
+      "title": "Embedded Linux Senior Software Engineer - Optimisation",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612171-embedded-linux-senior-software-engineer-optimisation",
+      "category": "it",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Senior Software Engineer - MAAS",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612170-senior-software-engineer-maas",
+      "category": "it",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Linux Platform Integration - Ubuntu Systems Senior Engineer",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612169-linux-platform-integration-ubuntu-systems-senior-engineer",
+      "category": "it",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Senior Site Reliability / Gitops Engineer",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612168-senior-site-reliability-gitops-engineer",
+      "category": "it",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Linux Software Engineer - Ubuntu for Next-Gen Silicon (multiple roles and seniority levels)",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612167-linux-software-engineer-ubuntu-for-next-gen-silicon-multiple-roles-and-seniority-levels",
+      "category": "it",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Senior Security Operations Engineer",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612166-senior-security-operations-engineer",
+      "category": "it",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Senior Software Engineer - Python/Golang - Kubernetes",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612164-senior-software-engineer-python-golang-kubernetes",
+      "category": "it",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Senior Site Reliability Engineer",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612161-senior-site-reliability-engineer",
+      "category": "it",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Systems Analyst",
+      "company": "TheHiveCareers",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612150-systems-analyst",
+      "category": "it",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Community Engineer (multiple roles and seniority levels)",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612148-community-engineer-multiple-roles-and-seniority-levels",
+      "category": "it",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Information and Communications Technology Technical Officer",
+      "company": "Equal Opportunity Tribunal",
+      "location": "Chaguanas",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2915",
+      "category": "it",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "IT Infrastructure Systems Administrator",
+      "company": "Digicel",
+      "location": "Port of Spain, TT",
+      "source": "Digicel",
+      "link": "https://careers.digicelgroup.com/job/Port-of-Spain-IT-Infrastructure-Systems-Administrator/1377194157/",
+      "category": "it",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "\"A SALES CAREER — THE GOOD, THE BAD & THE REALITY.\"Professional Insurance Sales Representative",
+      "company": "Guardian Life of the Caribbean Limited",
+      "location": "Arima, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/803443852-&quot;a-sales-career-the-good-the-bad-the-reality-&quot;professional-insurance-sales-representative",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Project Coordinator & Sustainability Consultant",
+      "company": "Übergreen Sustainability",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/803443851-project-coordinator-sustainability-consultant",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Client Relationship Officer",
+      "company": "Bourse Securities Limited",
+      "location": "Chaguanas, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/803443849-client-relationship-officer",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Collateral Filing Agent",
+      "company": "RBC",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/803443848-collateral-filing-agent",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Commercial Manager",
+      "company": "Airswift",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/803443847-commercial-manager",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Software Alliances Director, Americas",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612165-software-alliances-director-americas",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Alliances & Channels Leader",
+      "company": "Canonical",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612163-alliances-channels-leader",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Senior Organisational Development Practitioner",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612162-senior-organisational-development-practitioner",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Global Head of Cloud Alliances",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612160-global-head-of-cloud-alliances",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Open Source Enterprise Sales / Alliances",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612159-open-source-enterprise-sales-alliances",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Technical Author (multiple roles and seniority levels)",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612158-technical-author-multiple-roles-and-seniority-levels",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Partner Sales Manager - IHV Alliances",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612157-partner-sales-manager-ihv-alliances",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Embedded Devices Software Solution Sales Account Manager",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612156-embedded-devices-software-solution-sales-account-manager",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Senior Sales Operations Analyst",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612155-senior-sales-operations-analyst",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Field Marketing Representative",
+      "company": "Damus Building Solutions",
+      "location": "Couva, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612153-field-marketing-representative",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Junior Accounting Assistant Foreign AP",
+      "company": "TYE Manufacturing Co. Ltd",
+      "location": "Chaguanas, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612152-junior-accounting-assistant-foreign-ap",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Senior Manager- Risk Consulting",
+      "company": "KPMG in Trinidad and Tobago",
+      "location": "Port of Spain, TT",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612151-senior-manager-risk-consulting",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Job Description: PMO Manager – Insurance & Investments",
+      "company": "TheHiveCareers",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612149-job-description-pmo-manager-insurance-investments",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Embedded Devices Software Solution Sales - All Roles",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/802612147-embedded-devices-software-solution-sales-all-roles",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Accountant - BPO (12 month Contract)",
+      "company": "Memory Bank Computers Ltd",
+      "location": "TT",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/accountant-bpo-12-month-contract",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Senior E&I Technician",
+      "company": "",
+      "location": "Arima/Sangre Grande",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Senior-E-I-Technician-Job-241643.aspx",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "CHIEF FINANCIAL OFFICER",
+      "company": "Mario’s Pizzeria Limited",
+      "location": "Trincity",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/CHIEF-FINANCIAL-OFFICER-Job-241651.aspx",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "RESTAURANT SUPERVISOR",
+      "company": "Mario’s Pizzeria Limited",
+      "location": "Debe/Penal/Siparia",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/RESTAURANT-SUPERVISOR-Job-241646.aspx",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Executive Operations Director",
+      "company": "The Dachin Group of Companies",
+      "location": "Mt.Hope/Curepe",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Executive-Operations-Director-Job-241645.aspx",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Business Operations Assistant II",
+      "company": "Ministry Of Homeland Security",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2908",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "BUSINESS OPERATIONS COORDINATOR",
+      "company": "Ministry Of Homeland Security",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2904",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Director Legal Services",
+      "company": "Ministry Of Homeland Security",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2903",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Legal Officer I",
+      "company": "Ministry Of Homeland Security",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2907",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "LEGAL OFFICER II",
+      "company": "Ministry Of Homeland Security",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2905",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Senior Legal Officer",
+      "company": "Ministry Of Homeland Security",
+      "location": "Port of Spain",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2906",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
+    },
+    {
+      "title": "Project Control Engineer",
+      "company": "U.S. Embassy Port of Spain",
+      "location": "Port of Spain, Trinidad & Tobago",
+      "source": "US Embassy",
+      "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=ngk5ckhbpt0&returnToSearch=true&jnum=78839&orgId=175",
+      "category": "other",
+      "first_seen": "2026-11-12T03:35:43Z"
     }
   ]
 }
