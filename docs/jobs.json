@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-14T16:19:26Z",
-  "count": 1544,
+  "updated": "2026-11-15T02:24:19Z",
+  "count": 1547,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -13897,6 +13897,33 @@
       "link": "https://www.jobstt.com/job/accounts-clerk-17",
       "category": "other",
       "first_seen": "2026-11-14T16:16:16Z"
+    },
+    {
+      "title": "Accounting Officer - Accounts Payables & GL",
+      "company": "UNICOMER Group",
+      "location": "Chaguanas / Couva/Point Lisas / San Fernando",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Accounting-Officer-Accounts-Payables-GL-Job-241583.aspx",
+      "category": "other",
+      "first_seen": "2026-11-15T02:22:51Z"
+    },
+    {
+      "title": "Fitness Instructor/Fitness Coach",
+      "company": "",
+      "location": "Chaguanas / Couva/Point Lisas",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Fitness-Instructor-Fitness-Coach-Job-241788.aspx",
+      "category": "other",
+      "first_seen": "2026-11-15T02:22:51Z"
+    },
+    {
+      "title": "Project Control Engineer",
+      "company": "U.S. Embassy Port of Spain",
+      "location": "Port of Spain, Trinidad & Tobago",
+      "source": "US Embassy",
+      "link": "https://erajobs.state.gov/dos-era/vacancy/viewVacancyDetail.hms?_ref=s1vwrwlnpt0&returnToSearch=true&jnum=78839&orgId=175",
+      "category": "other",
+      "first_seen": "2026-11-15T02:22:51Z"
     }
   ]
 }
