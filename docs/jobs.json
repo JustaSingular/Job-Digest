@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-22T02:49:37Z",
-  "count": 1671,
+  "updated": "2026-11-22T17:32:17Z",
+  "count": 1677,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -15040,6 +15040,60 @@
       "link": "https://islandjobhunt.com/jobs/817413865-tax-associate-general-tax-trinidad",
       "category": "other",
       "first_seen": "2026-11-21T17:01:39Z"
+    },
+    {
+      "title": "Project Manager - Ubuntu Embedded Systems",
+      "company": "Canonical",
+      "location": "Remote (Port of Spain, TT)",
+      "source": "IslandJobHunt",
+      "link": "https://islandjobhunt.com/jobs/819575791-project-manager-ubuntu-embedded-systems",
+      "category": "it",
+      "first_seen": "2026-11-22T17:31:18Z"
+    },
+    {
+      "title": "Maintenance Supervisor",
+      "company": "Ministry Of Rural Development And Local Government",
+      "location": "Maraval",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2941",
+      "category": "other",
+      "first_seen": "2026-11-22T17:31:18Z"
+    },
+    {
+      "title": "Maintenance Worker",
+      "company": "Ministry Of Rural Development And Local Government",
+      "location": "Maraval",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2943",
+      "category": "other",
+      "first_seen": "2026-11-22T17:31:18Z"
+    },
+    {
+      "title": "Regional Coordinator",
+      "company": "Ministry Of Rural Development And Local Government",
+      "location": "Maraval",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2940",
+      "category": "other",
+      "first_seen": "2026-11-22T17:31:18Z"
+    },
+    {
+      "title": "Senior Operations Manager",
+      "company": "Ministry Of Rural Development And Local Government",
+      "location": "Maraval",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2938",
+      "category": "other",
+      "first_seen": "2026-11-22T17:31:18Z"
+    },
+    {
+      "title": "Senior Regional Coordinator",
+      "company": "Ministry Of Rural Development And Local Government",
+      "location": "Maraval",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2939",
+      "category": "other",
+      "first_seen": "2026-11-22T17:31:18Z"
     }
   ]
 }
