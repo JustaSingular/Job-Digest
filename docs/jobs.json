@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-25T05:14:45Z",
-  "count": 1714,
+  "updated": "2026-11-25T19:42:08Z",
+  "count": 1720,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -15427,6 +15427,60 @@
       "link": "https://jobstt.com/job/sales-representative-13",
       "category": "other",
       "first_seen": "2026-11-25T05:13:29Z"
+    },
+    {
+      "title": "IT Technician",
+      "company": "National Insurance Property Development Company Limited (NIPDEC)",
+      "location": "Chaguaramas",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2948",
+      "category": "it",
+      "first_seen": "2026-11-25T19:41:04Z"
+    },
+    {
+      "title": "Maintenance Supervisor",
+      "company": "UNICOMER Group",
+      "location": "Chaguanas / Couva/Point Lisas",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Maintenance-Supervisor-Job-242255.aspx",
+      "category": "other",
+      "first_seen": "2026-11-25T19:41:04Z"
+    },
+    {
+      "title": "Maintenance Technician",
+      "company": "UNICOMER Group",
+      "location": "Chaguanas / Couva/Point Lisas",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Maintenance-Technician-Job-242254.aspx",
+      "category": "other",
+      "first_seen": "2026-11-25T19:41:04Z"
+    },
+    {
+      "title": "Internal Auditor",
+      "company": "National Institute of Higher Education, Research, Science and Technology (NIHERST)",
+      "location": "Barataria",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2946",
+      "category": "other",
+      "first_seen": "2026-11-25T19:41:04Z"
+    },
+    {
+      "title": "Medical Supplies Coordinator",
+      "company": "National Insurance Property Development Company Limited (NIPDEC)",
+      "location": "Chaguaramas",
+      "source": "EmployTT",
+      "link": "https://employtt.gov.tt/jobs/view/2947",
+      "category": "other",
+      "first_seen": "2026-11-25T19:41:04Z"
+    },
+    {
+      "title": "Chief Executive Officer",
+      "company": "",
+      "location": "Arima, Trinidad & Tobago",
+      "source": "EveCaribbean",
+      "link": "https://evecaribbean.com/tt/job/chief-executive-officer/",
+      "category": "other",
+      "first_seen": "2026-11-25T19:41:04Z"
     }
   ]
 }
