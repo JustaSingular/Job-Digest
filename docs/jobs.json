@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-26T19:23:03Z",
-  "count": 1726,
+  "updated": "2026-11-27T04:52:19Z",
+  "count": 1729,
   "jobs": [
     {
       "title": "Program Manager, Completions, Commissioning & Start-Up (CCS), Trinidad & Guyana Operations",
@@ -15535,6 +15535,33 @@
       "link": "https://fa-eqnr-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1020/job/2050",
       "category": "other",
       "first_seen": "2026-11-26T19:21:44Z"
+    },
+    {
+      "title": "Production Planner",
+      "company": "Corporate One Business Management Ltd",
+      "location": "San Juan or Santa Cruz or El Socorro, North Central, TT",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/production-planner-3",
+      "category": "other",
+      "first_seen": "2026-11-27T04:46:26Z"
+    },
+    {
+      "title": "Teller (Temporary)",
+      "company": "Massy Finance GFC Ltd",
+      "location": "North West, TT",
+      "source": "JobsTT",
+      "link": "https://jobstt.com/job/teller-temporary",
+      "category": "other",
+      "first_seen": "2026-11-27T04:46:26Z"
+    },
+    {
+      "title": "Internal Auditor",
+      "company": "Jo-Anne Mouttet & Associates",
+      "location": "Arima/Sangre Grande / Couva/Point Lisas / San Fernando",
+      "source": "CaribbeanJobs",
+      "link": "https://www.caribbeanjobs.com/Internal-Auditor-Job-242320.aspx",
+      "category": "other",
+      "first_seen": "2026-11-27T04:46:26Z"
     }
   ]
 }
